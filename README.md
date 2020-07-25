@@ -16,7 +16,7 @@ engineering work already done within these projects
 
 The project was initiated by [Dr Erich Schulz](https://twitter.com/ErichSchulz),
 an Australian Anaesthetist together with
-Dr Rober Read, PhD, of [Public Invention](https://www.pubinv.org/).
+Dr Robert Read, PhD, of [Public Invention](https://www.pubinv.org/).
 They were rapidly joined by Ben Coombs, a New Zealand Engineer.
 
 The core team is focused on producing high quality software products, starting
