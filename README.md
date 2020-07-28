@@ -1,4 +1,4 @@
-# About Project VentOS
+# VentOS
 
 The VentOS project mission is:
 
