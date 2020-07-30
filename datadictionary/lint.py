@@ -30,8 +30,8 @@ for f, meta in meta_meta.items():
     log(f"### {f} {len(data[f])} rows:\n####required = {required}\n####allowed = {allowed} ")
     for key, fields in data[f].items():
         present = fields.keys()
-        extra = [f for f in present if f not in allowed]
-        missing = [f for f in required if f not in present]
+        extra = present - allowed
+        missing = required - present
         if len(missing) + len(extra):
             log(f"### {f}.{key} present: {present}")
             if len(missing):
