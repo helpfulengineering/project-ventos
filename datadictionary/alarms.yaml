@@ -52,8 +52,8 @@ TV_HI:
   notes: Tidal volume high
   source: [RMVS 1.d]
   status: core
-APNOEA:
-  notes: apnoea (seconds) (unsigned int)
+RR_LOW:
+  notes: respiratory rate low (BPM) (apnoea) (seconds) (unsigned int)
   source: [VentOS]
   status: proposed
 P_DIV:

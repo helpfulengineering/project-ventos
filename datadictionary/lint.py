@@ -1,5 +1,5 @@
 #!/usr/bin/python3.7
-import yaml, os
+import yaml, os, re
 path = 'datadictionary'
 verbose = False
 log = print
@@ -10,11 +10,13 @@ log = print if verbose else noop
 meta_meta = {
         'alarms': {
             'required': ['notes', 'source', 'status'],
-            'optional': []
+            'optional': [],
+            'key_regex': '^[A-Z0-9]+(_[A-Z0-9]+)*(_(HI|LOW|DIV|DIFF))$',
             },
         'abbreviations': {
             'required': ['full', 'source'],
-            'optional': ['definition', ]
+            'optional': ['definition', ],
+            'key_regex': '^\w*$',
             },
 }
 data = {}
@@ -25,6 +27,7 @@ for f, meta in meta_meta.items():
     errors = 0
     required = meta['required']
     allowed = meta['required'] + meta['optional']
+    key_pattern = re.compile(meta['key_regex'])
     yaml_text = open(os.path.join(path, f'{f}.yaml'), 'r').read()
     data[f] = yaml.load(yaml_text)
     log(f"### {f} {len(data[f])} rows:\n####required = {required}\n####allowed = {allowed} ")
@@ -40,6 +43,9 @@ for f, meta in meta_meta.items():
             if len(extra):
                 errors +=1
                 log(f'extra: {extra}')
+        if not key_pattern.match(key):
+            errors +=1
+            log(f"key: {key} does not match {meta['key_regex']}")
     log(f'### {f} errors {total_errors}')
     total_errors += errors
 log(f'### {f} total errors {total_errors}')
