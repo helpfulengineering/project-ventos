@@ -1,0 +1,47 @@
+# VentOS Standard Abbreviations
+
+BIPAP:
+  full: bilevel positive airway pressure
+  definition: A non-invasive ventilation mode that provides different levels of pressure when the patient inhales and exhales.
+  source: RMVS
+CPAP:
+  full: continuous positive airway pressure
+  definition: A non-invasive ventilation mode that provides a constant steadypressure to keep the lungs expanded
+  source: RMVS
+CMV:
+  full: continuous mandatory ventilation
+  source: RMVS
+ET:
+  full: end-tidal
+  source: VentOS
+Fi:
+  full: fraction inspired
+  source: VentOS
+Fi02:
+  full: fraction of inspired oxygen
+  definition: concentration of oxygen in the gas mixture that the patient inhales
+  source: RMVS
+IPPV:
+  full: intermittent positive pressure ventilation
+  definition: A mandatory invasive ventilation mode used to replacea patient’sbreathing when they cannot for themselves. Can be either volume controlled or pressure controlled. It does not synchronise any patient breathing efforts.
+  source: RMVS
+MV:
+  full: minute volume
+  source: VentOS
+PCV:
+  full: pressure controlled ventilation
+  source: RMVS
+PEEP:
+  full: positive end-expiratory pressure
+  definition: The pressure maintained in the breathing system during expiration
+  source: RMVS
+PRVC:
+  full: pressure regulated volume controlled
+  definition: A mode of ventilation where a set tidal volume is delivered to the patient while maintain the lowest pressure possible in the airway, to avtrauma.
+  source: RMVS
+TV:
+  full: tidal volume
+  source: VentOS
+VCV:
+  full: volume controlled ventilation
+  source: RMVS

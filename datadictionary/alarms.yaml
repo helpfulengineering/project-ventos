@@ -1,0 +1,121 @@
+# VentOS alarm conditions
+#
+## todo - some of the detail needs to come out of this file and live elsewhere
+# All references to RMVS imply RMVS001_v4 p8
+# https://assets.publishing.service.gov.uk/government/uploads/system/uploads/attachment_data/file/879382/RMVS001_v4.pdf
+# Note the following standard suffixes:
+# diff - difference between desired and achieved values
+# div - divergence between two measured values (ie sensor problem)
+# hi - high
+# low - low
+BATTERY_LOW:
+  notes: Battery status info/warning/alarm/critical (?? % or volts)
+  source: [RMVS 1.a]
+  status: core
+MAINS_LOW:
+  notes: Mains power failure (seconds delay)
+  source: [RMVS 1.a]
+  status: proposed
+POWER_LOW:
+  notes: Complete loss of power imminent, as both mains and battery unavailable. This is emergency if in mandatory ventilaton mode.
+  source: [RMVS 1.a, RMVS 1.b]
+  status: proposed
+OXYGEN_LOW:
+  notes: Oxygen supply failure (mBar - eg 3000)
+  source: [RMVS 1.a]
+  status: core
+AIR_LOW:
+  notes: Air supply failure (mBar - eg 3000)
+  source: [RMVS 1.a]
+  status: core
+PEAK_PI_HI:
+  notes: Instantaneous over-pressure (cmH2O) - a single reading triggers alarm
+  source: [RMVS 1.c]
+  status: core
+PI_HI:
+  notes: Sustained over-pressure (seconds and cmH2O - eg over 30cmH2O for 5 seconds) - ie a PEEP high alarm
+  source: [RMVS 1.c]
+  status: proposed
+PI_LOW:
+  notes: Potential disconnect
+  source: [RMVS 1.d]
+  status: core
+PEEP_LOW:
+  notes: Potential disconnect
+  source: [RMVS 1.d]
+  status: core
+TV_LOW:
+  notes: Tidal volume low
+  source: [RMVS 1.d]
+  status: core
+TV_HI:
+  notes: Tidal volume high
+  source: [RMVS 1.d]
+  status: core
+APNOEA:
+  notes: apnoea (seconds) (unsigned int)
+  source: [VentOS]
+  status: proposed
+P_DIV:
+  notes: pressure sensor divergence (fault or miscalibration) cmH2O
+  source: [VentOS]
+  status: proposed
+FLOW_DIV:
+  notes: flow sensor divergence (fault or miscalibration, ) ml/minute
+  source: [VentOS]
+  status: proposed
+OXYGEN_DIV:
+  notes: oxygen sensor divergence (fault or miscalibration), absolute %
+  source: [VentOS]
+  status: proposed
+MV_HI:
+  notes: minute volume high (ml)
+  source: [VentOS]
+  status: proposed
+MV_LOW:
+  notes: minute volume low (ml)
+  source: [VentOS]
+  status: proposed
+ETCO2_HI:
+  notes: etCO2 high (mmHg)
+  source: [VentOS]
+  status: proposed
+ETCO2_LOW:
+  notes: etCO2 low (mmHg)
+  source: [VentOS]
+  status: proposed
+FIO2_HI:
+  notes: FiO2 low (%)
+  source: [VentOS]
+  status: proposed
+FIO2_LOW:
+  notes: FiO2 low (%)
+  source: [VentOS]
+  status: proposed
+RR_HI:
+  notes: respiratory rate high (BPM)
+  source: [VentOS]
+  status: proposed
+RR_LOW:
+  notes: respiratory rate low (BPM)
+  source: [VentOS]
+  status: proposed
+TV_DIFF:
+  notes: tidal volume difference from setting (VCV/PRVC)
+  source: [VentOS]
+  status: proposed
+PI_DIFF:
+  notes: Pi different from setting (PCV/PSV)
+  source: [VentOS]
+  status: proposed
+RR_DIFF:
+  notes: RR difference from setting (BPM)
+  source: [VentOS]
+  status: proposed
+TEMP_HI:
+  notes: overheating (degrees c)
+  source: [VentOS]
+  status: proposed
+
+
+
