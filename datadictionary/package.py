@@ -1,17 +1,14 @@
 #!/usr/bin/python3.7
 import yaml, os
-import pprint, inspect
-
 path = 'datadictionary'
-p = pprint.pprint
-print(f"hello world! from {os.getcwd()}")
-alarm_yaml = open(os.path.join(path, 'alarms.yaml'), 'r').read()
-abbreviation_yaml = open(os.path.join(path, 'abbreviations.yaml'), 'r').read()
-
-alarms = yaml.load(alarm_yaml)
-abbreviations = yaml.load(abbreviation_yaml)
-
-print(f"#RAW:\n{alarm_yaml}")
-p(alarms)
-# p(abbreviations)
+print(f"# package generation stub from {os.getcwd()}")
+print("""This script does nothing useful, but acts as a placeholder for future transformation scripts.
+        """)
+files = ['alarms', 'abbreviations']
+data = {}
+for f in files:
+    yaml_text = open(os.path.join(path, f'{f}.yaml'), 'r').read()
+    data[f] = yaml.load(yaml_text)
+    print(f'\n## {f} keys')
+    print("\n".join((data[f].keys())))
 
