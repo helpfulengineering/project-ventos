@@ -1,0 +1,25 @@
+# VentOS alarm levels
+#
+# https://gitlab.com/bencoombs/ventos/-/issues/7
+# note synomyms are included for reference only
+NOTICE:
+  synonyms: [INFO]
+  notes: eg apnoea 10 seconds, battery 10%
+  status: proposed
+ALERT:
+  synonyms: [LOW]
+  notes:
+  status: proposed
+WARNING:
+  synonyms: [MEDIUM]
+  notes:
+  status: proposed
+ALARM:
+  synonyms: [HIGH]
+  notes:
+  status: proposed
+CRITICAL:
+  synonyms: [EMERGENCY]
+  notes:
+  status: proposed
+
