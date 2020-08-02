@@ -1,0 +1,209 @@
+## Hardware configuration:
+#
+# sot: "source of truth"
+
+#inspiratory pressure sensor installed - BOOL
+#expiratory pressure sensor installed - BOOL
+#inspiratory flow sensor installed - BOOL
+#expiratory flow sensor installed - BOOL
+#cycle time (1/frequency) - ms (unsigned int)
+#more...
+
+# Log settings
+LOG_INTERVAL:
+  status: draft
+  notes: "logging interval (ms) (unsigned int)"
+  units: seconds
+  sot: config
+MAX_LOG_SIZE:
+  status: draft
+  notes: max log size
+  units: kilobytes?
+  sot: config
+
+# Alarm settings:
+ALARM_SUSPEND_DURATION:
+  status: draft
+  notes: suspend duration (eg 120) (unsigned int)
+  units: seconds
+  sot: config
+
+# Configuration
+
+PATIENT_WEIGHT:
+  status: draft
+  notes: Patient weight
+  units: kg
+  sot: operator
+PATIENT_HEIGHT:
+  status: draft
+  notes: Patient height
+  units: cm
+  sot: operator
+PATIENT_GENDER:
+  status: draft
+  notes: Patient gender
+  enum: [M, F, I]
+  sot: operator
+IDEAL_BODY_WEIGHT:
+  status: draft
+  notes: Ideal body weight
+  units: kg
+  sot: derived
+
+## Current settings:
+TV:
+  status: draft
+  notes: tidal volume [VCV, PRVC]
+  units: ml
+  sot: operator
+PI:
+  status: draft
+  notes: Pi,  [PSV, PCV]
+  units: cmH2O
+  sot: operator
+INSPIRATION_TRIGGER:
+  status: draft
+  notes: inspiration trigger (cmH2O or ml/min) [PSV]
+  units: TBA - should this be a two seperate values (one for each unit?)
+  sot: operator
+EXPIRATORY_TERMINATION_TRIGGER:
+  status: draft
+  notes: expiratory termination trigger (percent of peak inspiratory flow) (PSV)
+  units: percent
+  sot: operator
+INSPIRATORY_TIME:
+  status: draft
+  notes: inspiratory time (which together with respiratory rate imply IE)
+  units: miliseconds
+  sot: operator
+MIN_RESPIRATORY_RATE:
+  status: draft
+  notes: minimum respiratory rate, (BPM)
+  units: BPM
+  sot: operator
+PEEP:
+  status: draft
+  notes: PEEP
+  units: cmH2O
+  sot: operator
+FIO2:
+  status: draft
+  notes: FiO2
+  units: percent
+  sot: operator
+VENTILATION_MODE:
+  status: draft
+  notes:
+  enum: [VCV, PSV, PCV, PRVC]
+  sot: operator
+
+# status
+
+## latest sensor readings
+BATTERY_STATUS:
+  status: draft
+  notes: Battery status (V or percent)
+  sot: sensor
+MAINS_STATUS:
+  status: draft
+  notes: Mains status (V or Boolean)
+  sot: sensor
+OXYGEN_LINE_PRESSURE:
+  status: draft
+  notes: Oxygen line pressure (mBar)
+  sot: sensor
+AIR_LINE_PRESSURE:
+  status: draft
+  notes: Air line pressure (mBar)
+  sot: sensor
+P1:
+  status: draft
+  notes: P1
+  units: cmH2O
+  sot: sensor
+P2:
+  status: draft
+  notes: P2
+  units: cmH2O
+  sot: sensor
+FI:
+  status: draft
+  notes: FI
+  units: ml/minute
+  sot: sensor
+FE:
+  status: draft
+  notes: FE
+  units: ml/minute
+  sot: sensor
+FO2:
+  status: draft
+  notes: fraction of gas that is oxygen
+  units: percent
+  sot: sensor
+PCO2:
+  status: draft
+  notes: partial pressure of CO2
+  units: mmHg
+  sot: sensor
+
+## Derived values
+INSPIRING:
+  status: draft
+  notes: flag to indicate phase of respiratory cycle
+  sot: derived
+PI:
+  status: draft
+  notes: Pi
+  units: cmH2O
+  sot: derived
+PEEP:
+  status: draft
+  notes: PEEP
+  units: cmH2O
+  sot: derived
+TVI:
+  status: draft
+  notes: TVi
+  units: ml
+  sot: derived
+TVE:
+  status: draft
+  notes: TVe
+  units: ml
+  sot: derived
+FIO2:
+  status: draft
+  notes: FiO2
+  units: percent
+  sot: derived
+FEO2:
+  status: draft
+  notes: FeO2
+  units: percent
+  sot: derived
+ETCO2:
+  status: draft
+  notes: EtCO2
+  units: mmHg
+  sot: derived
+ICO2:
+  status: draft
+  notes: ICO2
+  units: mmHg
+  sot: derived
+
+# Logging:
+LAST_LOG_TIME:
+  status: draft
+  notes: last log time
+  units: time
+  sot: timestamp
+
+#Alarm settings
+ALARM_SUSPENDED_TIME:
+  status: draft
+  notes: Alarm suspended time
+  units: time
+  sot: timestamp

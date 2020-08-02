@@ -9,6 +9,18 @@ def noop(x):
 log = print if verbose else noop
 
 meta_meta = {
+    'state': {
+        'required': {
+            'notes': { },
+            'status': { 'enum': ['core', 'draft', 'proposed'] },
+            'sot': {'enum': ['config', 'operator', 'sensor', 'derived', 'timestamp']},
+            },
+        'optional': {
+            'units': {},
+            'enum': {},
+            },
+        'key_regex': '^[A-Z]+([A-Z0-9])*(_[A-Z0-9]+)*$',
+        },
     'alarm': {
         'required': {
             'notes': { },
@@ -72,7 +84,7 @@ def test_lint():
                 errors +=1
                 log(f"#### key: {key} does not match {meta['key_regex']}")
             for field, val in fields.items():
-                field_meta = allowed[field]
+                field_meta = allowed.get(field, {})
                 enum = field_meta.get('enum', False)
                 if enum and val not in enum:
                     log(f'#### unknown "{field}" value: "{val}" expecting one of {enum}')
@@ -82,7 +94,6 @@ def test_lint():
         total_errors += errors
     log(f'### {f} total errors {total_errors}')
 
-    if total_errors:
-        raise Exception(f'Linting data dictionary: errors {total_errors}')
+    assert total_errors == 0
 
 

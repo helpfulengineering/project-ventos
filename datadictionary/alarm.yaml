@@ -8,6 +8,16 @@
 # div - divergence between two measured values (ie sensor problem)
 # hi - high
 # low - low
+#
+## TODO: Alarm meta configuration
+#Meta data for each alarm
+#start-up (default) threshold
+#maximum user settable value
+#minimum user settable value
+#criticality:
+#mandatory on
+#ideal on, but user may disable (leading to on-screen alert to user)
+#optional - off by default, user may anable
 BATTERY_LOW:
   notes: Battery status info/warning/alarm/critical (?? % or volts)
   source: [RMVS 1.a]
