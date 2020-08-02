@@ -12,54 +12,75 @@
 # Log settings
 LOG_INTERVAL:
   status: draft
-  notes: "logging interval (ms) (unsigned int)"
-  units: seconds
+  notes: logging interval
+  units: miliseconds
   sot: config
+  min: 1
+  max: 3600000 # 1 hour
 MAX_LOG_SIZE:
   status: draft
   notes: max log size
-  units: kilobytes?
+  units: kilobytes
   sot: config
-
+  min: 0
+  max: 4294967295
+  default: 10000
 # Alarm settings:
 ALARM_SUSPEND_DURATION:
   status: draft
-  notes: suspend duration (eg 120) (unsigned int)
+  notes: >
+    Time that alarms are suspended for by user pressing the "Alarm silence"
+    button.
   units: seconds
   sot: config
-
+  min: 10
+  max: 120
+  default: 60
 PATIENT_WEIGHT:
   status: draft
   notes: Patient weight
-  units: kg
+  units: kg # should consider using grams for paediatric / vetirnary settings?
   sot: operator
+  min: 1
+  max: 500
 PATIENT_HEIGHT:
   status: draft
   notes: Patient height
   units: cm
   sot: operator
+  min: 15
+  max: 250
 PATIENT_GENDER:
   status: draft
   notes: Patient gender
   enum: [M, F, I]
   sot: operator
+  default: I
 IDEAL_BODY_WEIGHT:
   status: draft
-  notes: Ideal body weight
+  notes: Ideal body weight.
   units: kg
   sot: derived
-
+  min: 1
+  max: 250
+  default: 70
 ## Current settings:
 TV:
   status: draft
   notes: tidal volume [VCV, PRVC]
   units: ml
   sot: operator
-PI:
+  min: 250 # Typically lower volumes, in children, use PCV
+  max: 2000 # nb RMVS suggests 250-800 ml settable range
+  default: 400 # per RMVS spec
+SET_PI:
   status: draft
   notes: Pi,  [PSV, PCV]
   units: cmH2O
   sot: operator
+  min: -10 # negative values are observed in fault situations
+  max: 40 #
+  default: 20 # per RMVS spec
 INSPIRATION_TRIGGER:
   status: draft
   notes: inspiration trigger (cmH2O or ml/min) [PSV]
@@ -80,12 +101,12 @@ MIN_RESPIRATORY_RATE:
   notes: minimum respiratory rate, (BPM)
   units: BPM
   sot: operator
-PEEP:
+SET_PEEP:
   status: draft
   notes: PEEP
   units: cmH2O
   sot: operator
-FIO2:
+SET_FIO2:
   status: draft
   notes: FiO2
   units: percent

@@ -62,10 +62,6 @@ TV_HI:
   notes: Tidal volume high
   source: [RMVS 1.d]
   status: core
-RR_LOW:
-  notes: respiratory rate low (BPM) (apnoea) (seconds) (unsigned int)
-  source: [VentOS]
-  status: proposed
 P_DIV:
   notes: pressure sensor divergence (fault or miscalibration) cmH2O
   source: [VentOS]
@@ -107,7 +103,7 @@ RR_HI:
   source: [VentOS]
   status: proposed
 RR_LOW:
-  notes: respiratory rate low (BPM)
+  notes: respiratory rate low (BPM) (apnoea) (seconds) (unsigned int)
   source: [VentOS]
   status: proposed
 TV_DIFF:
