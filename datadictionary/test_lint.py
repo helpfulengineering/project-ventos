@@ -2,9 +2,7 @@
 import yaml, os, re, glob
 import pytest
 dictionary_path = 'datadictionary'
-
 log = print
-
 
 # special loader with duplicate key checking
 class UniqueKeyLoader(yaml.SafeLoader):
@@ -31,13 +29,20 @@ meta_meta = {
             'sot': {'enum': ['config', 'operator', 'sensor', 'derived', 'timestamp']},
             },
         'optional': {
-            'units': {},
+            'units': {
+                'enum': ['miliseconds', 'seconds', 'time', 'BPM',
+                    'cmH2O', 'mBar', 'mmHg',
+                    'ml', 'kg', 'cm', 'percent', 'ml/minute',
+                    'Volts', 'Boolean', 'kilobytes'],},
             'enum': {},
             'min': {},
             'max': {},
             'default': {},
             },
-        'extra_checks': (lambda i: must_have_n_of(i, ['units', 'enum'])),
+        'extra_checks': [
+            lambda i,m: must_have_n_of(i, ['units', 'enum']),
+            lambda i,m: must_have_n_of(i, ['default'], n=1) if i['sot'] in ['config', 'operator'] else False,
+            ],
         'key_regex': '^[A-Z]+([A-Z0-9])*(_[A-Z0-9]+)*$',
         },
     'alarm': {
@@ -108,9 +113,8 @@ def test_lint():
                 if enum and val not in enum:
                     log(f'#### unknown "{field}" value: "{val}" expecting one of {enum}')
                     errors +=1
-            extra_checks = meta.get('extra_checks', False)
-            if extra_checks:
-                extra_errors = extra_checks(fields)
+            for extra_check in meta.get('extra_checks', []):
+                extra_errors = extra_check(fields, meta)
                 if extra_errors:
                     log(f'#### {key} -"{extra_errors}"')
                     errors +=1

@@ -12,14 +12,15 @@
 # Log settings
 LOG_INTERVAL:
   status: draft
-  notes: logging interval
+  notes: Desired logging interval
   units: miliseconds
   sot: config
   min: 1
+  default: 300000 # 5 minutes
   max: 3600000 # 1 hour
 MAX_LOG_SIZE:
   status: draft
-  notes: max log size
+  notes: Maximum log size
   units: kilobytes
   sot: config
   min: 0
@@ -43,6 +44,7 @@ PATIENT_WEIGHT:
   sot: operator
   min: 1
   max: 500
+  default:
 PATIENT_HEIGHT:
   status: draft
   notes: Patient height
@@ -50,6 +52,7 @@ PATIENT_HEIGHT:
   sot: operator
   min: 15
   max: 250
+  default:
 PATIENT_GENDER:
   status: draft
   notes: Patient gender
@@ -58,7 +61,7 @@ PATIENT_GENDER:
   default: I
 IDEAL_BODY_WEIGHT:
   status: draft
-  notes: Ideal body weight.
+  notes: Ideal body weight
   units: kg
   sot: derived
   min: 1
@@ -81,41 +84,66 @@ SET_PI:
   min: -10 # negative values are observed in fault situations
   max: 40 #
   default: 20 # per RMVS spec
-INSPIRATION_TRIGGER:
+INSPIRATION_FLOW_TRIGGER:
   status: draft
-  notes: inspiration trigger (cmH2O or ml/min) [PSV]
-  units: TBA - should this be a two seperate values (one for each unit?)
+  notes: inspiration trigger [PSV]
+  units: ml/minute
   sot: operator
+  default: 2
+INSPIRATION_P_TRIGGER:
+  status: draft
+  notes: inspiration trigger [PSV]
+  units: cmH2O
+  sot: operator
+  min: 0.1
+  max: 10.0
+  default: 0.5
 EXPIRATORY_TERMINATION_TRIGGER:
   status: draft
   notes: expiratory termination trigger (percent of peak inspiratory flow) (PSV)
   units: percent
   sot: operator
+  min: 0
+  max: 99
+  default: 25
 INSPIRATORY_TIME:
   status: draft
   notes: inspiratory time (which together with respiratory rate imply IE)
   units: miliseconds
   sot: operator
-MIN_RESPIRATORY_RATE:
+  min: 100
+  max: 30000
+  default: 2000
+MIN_RR:
   status: draft
-  notes: minimum respiratory rate, (BPM)
+  notes: In PCV and VCV modes this is the rate, however synchronised modes this value is the minimum rate.
   units: BPM
+  min: 0
+  max: 60
   sot: operator
+  default: 10
 SET_PEEP:
   status: draft
   notes: PEEP
   units: cmH2O
   sot: operator
+  min: 0
+  max: 40
+  default: 5
 SET_FIO2:
   status: draft
   notes: FiO2
   units: percent
   sot: operator
+  min: 21
+  max: 100
+  default: 50
 VENTILATION_MODE:
   status: draft
   notes:
   enum: [VCV, PSV, PCV, PRVC]
   sot: operator
+  default: PSV
 # status
 ## latest sensor readings
 BATTERY_STATUS:
@@ -123,11 +151,15 @@ BATTERY_STATUS:
   notes: Battery status
   sot: sensor
   units: percent
+  min: 0
+  max: 100
 MAINS_STATUS:
   status: draft
   notes: Mains status
   sot: sensor
   units: Volts
+  min: 0
+  max: 1000
 OXYGEN_LINE_PRESSURE:
   status: draft
   notes: Oxygen line pressure
@@ -138,37 +170,50 @@ AIR_LINE_PRESSURE:
   notes: Air line pressure
   sot: sensor
   units: mBar
+  min: 0
+  max: 10000
 P1:
   status: draft
   notes: P1
   units: cmH2O
   sot: sensor
+  min: 0
+  max: 200
 P2:
   status: draft
   notes: P2
   units: cmH2O
   sot: sensor
+  min: 0
+  max: 200
 FI:
   status: draft
   notes: flow recorded by the inspiratory manifold sensor
   units: ml/minute
   sot: sensor
+  min: 0
+  max: 200
 FE:
   status: draft
   notes: flow recorded by the expiratory manifold sensor
   units: ml/minute
   sot: sensor
+  min: 0
+  max: 200
 FO2:
   status: draft
   notes: fraction of gas that is oxygen at the patient airway
   units: percent
   sot: sensor
+  min: 0
+  max: 100
 PCO2:
   status: draft
   notes: partial pressure of CO2 measured at the patient airway
   units: mmHg
   sot: sensor
-
+  min: 0
+  max: 200
 ## Derived values
 INSPIRING:
   status: draft
@@ -180,49 +225,63 @@ PI:
   notes: Pi
   units: cmH2O
   sot: derived
+  min: 0
+  max: 200
 PEEP:
   status: draft
   notes: PEEP
   units: cmH2O
   sot: derived
+  min: 0
+  max: 200
 TVI:
   status: draft
   notes: TVi
   units: ml
   sot: derived
+  min: 0
+  max: 6000
 TVE:
   status: draft
   notes: TVe
   units: ml
   sot: derived
+  min: 0
+  max: 6000
 FIO2:
   status: draft
   notes: FiO2
   units: percent
   sot: derived
+  min: 0
+  max: 100
 FEO2:
   status: draft
   notes: FeO2
   units: percent
   sot: derived
+  min: 0
+  max: 100
 ETCO2:
   status: draft
   notes: EtCO2
   units: mmHg
   sot: derived
+  min: 0
+  max: 100
 ICO2:
   status: draft
-  notes: ICO2
+  notes: inspired CO2 partial pressure
   units: mmHg
   sot: derived
-
+  min: 0
+  max: 100
 # Logging:
 LAST_LOG_TIME:
   status: draft
-  notes: last log time
+  notes: last time the system wrote to the log
   units: time
   sot: timestamp
-
 #Alarm settings
 ALARM_SUSPENDED_TIME:
   status: draft
