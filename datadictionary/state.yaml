@@ -28,8 +28,6 @@ ALARM_SUSPEND_DURATION:
   units: seconds
   sot: config
 
-# Configuration
-
 PATIENT_WEIGHT:
   status: draft
   notes: Patient weight
@@ -97,26 +95,28 @@ VENTILATION_MODE:
   notes:
   enum: [VCV, PSV, PCV, PRVC]
   sot: operator
-
 # status
-
 ## latest sensor readings
 BATTERY_STATUS:
   status: draft
-  notes: Battery status (V or percent)
+  notes: Battery status
   sot: sensor
+  units: percent
 MAINS_STATUS:
   status: draft
-  notes: Mains status (V or Boolean)
+  notes: Mains status
   sot: sensor
+  units: Volts
 OXYGEN_LINE_PRESSURE:
   status: draft
-  notes: Oxygen line pressure (mBar)
+  notes: Oxygen line pressure
   sot: sensor
+  units: mBar
 AIR_LINE_PRESSURE:
   status: draft
-  notes: Air line pressure (mBar)
+  notes: Air line pressure
   sot: sensor
+  units: mBar
 P1:
   status: draft
   notes: P1
@@ -129,22 +129,22 @@ P2:
   sot: sensor
 FI:
   status: draft
-  notes: FI
+  notes: flow recorded by the inspiratory manifold sensor
   units: ml/minute
   sot: sensor
 FE:
   status: draft
-  notes: FE
+  notes: flow recorded by the expiratory manifold sensor
   units: ml/minute
   sot: sensor
 FO2:
   status: draft
-  notes: fraction of gas that is oxygen
+  notes: fraction of gas that is oxygen at the patient airway
   units: percent
   sot: sensor
 PCO2:
   status: draft
-  notes: partial pressure of CO2
+  notes: partial pressure of CO2 measured at the patient airway
   units: mmHg
   sot: sensor
 
@@ -152,6 +152,7 @@ PCO2:
 INSPIRING:
   status: draft
   notes: flag to indicate phase of respiratory cycle
+  units: Boolean
   sot: derived
 PI:
   status: draft

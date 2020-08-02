@@ -8,6 +8,13 @@ def noop(x):
     pass
 log = print if verbose else noop
 
+# compare the fields i an item to a list to see if we have
+# interchangeable fields
+def must_have_n_of(item, fields, n = 1):
+    return f'must have {n} of {fields} found {list(item.keys())}' \
+        if len(fields - item.keys()) != len(fields)-n else False
+
+
 meta_meta = {
     'state': {
         'required': {
@@ -19,6 +26,7 @@ meta_meta = {
             'units': {},
             'enum': {},
             },
+        'extra_checks': (lambda i: must_have_n_of(i, ['units', 'enum'])),
         'key_regex': '^[A-Z]+([A-Z0-9])*(_[A-Z0-9]+)*$',
         },
     'alarm': {
@@ -89,10 +97,16 @@ def test_lint():
                 if enum and val not in enum:
                     log(f'#### unknown "{field}" value: "{val}" expecting one of {enum}')
                     errors +=1
+            extra_checks = meta.get('extra_checks', False)
+            if extra_checks:
+                extra_errors = extra_checks(fields)
+                if extra_errors:
+                    log(f'#### {key} -"{extra_errors}"')
+                    errors +=1
 
-        log(f'### {f} errors {total_errors}')
         total_errors += errors
-    log(f'### {f} total errors {total_errors}')
+        log(f'### {f} errors {errors}')
+    log(f'### total errors {total_errors}')
 
     assert total_errors == 0
 
