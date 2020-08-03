@@ -146,32 +146,60 @@ VENTILATION_MODE:
   default: PSV
 # status
 ## latest sensor readings
-BATTERY_STATUS:
+BATTERY:
   status: draft
   notes: Battery status
   sot: sensor
   units: percent
   min: 0
   max: 100
-MAINS_STATUS:
+MAINS:
   status: draft
   notes: Mains status
   sot: sensor
   units: Volts
   min: 0
   max: 1000
-OXYGEN_LINE_PRESSURE:
+POWER:
+  status: draft
+  notes: Combined battery and mains power status
+  sot: derived
+  units: percent
+  min: 0
+  max: 100
+OXYGEN_LINE:
   status: draft
   notes: Oxygen line pressure
   sot: sensor
   units: mBar
-AIR_LINE_PRESSURE:
+AIR_LINE:
   status: draft
   notes: Air line pressure
   sot: sensor
   units: mBar
   min: 0
   max: 10000
+TEMPERATURE:
+  status: draft
+  notes: Internal temperature
+  sot: sensor
+  units: Celsius
+  min: 0
+  max: 1000
+P:
+  status: draft
+  notes: Observed circuit pressure
+  units: cmH2O
+  sot: derived
+  min: 0
+  max: 200
+RR:
+  status: draft
+  notes:
+  units: BPM
+  min: 0
+  max: 60
+  sot: derived
 P1:
   status: draft
   notes: P1
@@ -200,6 +228,13 @@ FE:
   sot: sensor
   min: 0
   max: 200
+FLOW:
+  status: draft
+  notes: flow recorded by both sensors and smoothed
+  units: ml/minute
+  sot: derived
+  min: -200
+  max: 200
 FO2:
   status: draft
   notes: fraction of gas that is oxygen at the patient airway
@@ -221,6 +256,13 @@ INSPIRING:
   units: Boolean
   sot: derived
 PI:
+  status: draft
+  notes: Pi with some smoothing applied
+  units: cmH2O
+  sot: derived
+  min: 0
+  max: 200
+PEAK_PI:
   status: draft
   notes: Pi
   units: cmH2O
@@ -248,6 +290,13 @@ TVE:
   sot: derived
   min: 0
   max: 6000
+MV:
+  status: draft
+  notes: Minute volume (the product of respiratory rate and tidal volume)
+  units: ml
+  sot: derived
+  min: 0
+  max: 60000
 FIO2:
   status: draft
   notes: FiO2

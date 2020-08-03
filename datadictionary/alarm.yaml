@@ -30,11 +30,11 @@ POWER_LOW:
   notes: Complete loss of power imminent, as both mains and battery unavailable. This is emergency if in mandatory ventilaton mode.
   source: [RMVS 1.a, RMVS 1.b]
   status: proposed
-OXYGEN_LOW:
+OXYGEN_LINE_LOW:
   notes: Oxygen supply failure (mBar - eg 3000)
   source: [RMVS 1.a]
   status: core
-AIR_LOW:
+AIR_LINE_LOW:
   notes: Air supply failure (mBar - eg 3000)
   source: [RMVS 1.a]
   status: core
@@ -70,7 +70,7 @@ FLOW_DIV:
   notes: flow sensor divergence (fault or miscalibration, ) ml/minute
   source: [VentOS]
   status: proposed
-OXYGEN_DIV:
+FO2_DIV:
   notes: oxygen sensor divergence (fault or miscalibration), absolute %
   source: [VentOS]
   status: proposed
@@ -118,7 +118,7 @@ RR_DIFF:
   notes: RR difference from setting (BPM)
   source: [VentOS]
   status: proposed
-TEMP_HI:
+TEMPERATURE_HI:
   notes: overheating (degrees c)
   source: [VentOS]
   status: proposed
