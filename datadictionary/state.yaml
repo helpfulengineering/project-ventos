@@ -90,6 +90,8 @@ INSPIRATION_FLOW_TRIGGER:
   units: ml/minute
   sot: operator
   default: 2
+  min: 0
+  max: 10
 INSPIRATION_P_TRIGGER:
   status: draft
   notes: inspiration trigger [PSV]
@@ -172,6 +174,8 @@ OXYGEN_LINE:
   notes: Oxygen line pressure
   sot: sensor
   units: mBar
+  min: 0
+  max: 10000
 AIR_LINE:
   status: draft
   notes: Air line pressure
@@ -191,7 +195,7 @@ P:
   notes: Observed circuit pressure
   units: cmH2O
   sot: derived
-  min: 0
+  min: -10 # negative values are observed in fault situations
   max: 200
 RR:
   status: draft
@@ -202,17 +206,17 @@ RR:
   sot: derived
 P1:
   status: draft
-  notes: P1
+  notes: Primary pressure sensor value
   units: cmH2O
   sot: sensor
-  min: 0
+  min: -10 # negative values are observed in fault situations
   max: 200
 P2:
   status: draft
-  notes: P2
+  notes: Secondary pressure sensor value
   units: cmH2O
   sot: sensor
-  min: 0
+  min: -10 # negative values are observed in fault situations
   max: 200
 FI:
   status: draft
