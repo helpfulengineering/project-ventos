@@ -1,5 +1,5 @@
 #!/usr/bin/python3.7
-import yaml, pandas as pd, math
+import yaml, pandas as pd, math, re
 from textwrap import dedent
 import ventos_yaml as vy
 
@@ -31,16 +31,21 @@ def print_main_md(data):
             range_cols = ['min', 'max', 'units', 'enum', 'default']
             df['values'] = [
                     ("" if pd.isnull(r.default) else f"{r.default} " ) +
-                    (f"({r.enum}) " if type(r.enum)==list
+                    (f"({', '.join(r.enum)}) " if type(r.enum)==list
                         else ('' if r.units in ['time', 'Boolean']
                             else f"({r.min}-{r.max}) ") + f"{r.units}")
+                    for r in df.itertuples()]
+            # create a list of alarms this property links to
+            df['alarms'] = [
+                    ', '.join([k for k in data['alarm'].keys()
+                                 if re.match(f"{r.Index}_[A-Z]*", k)])
                     for r in df.itertuples()]
             df.drop(range_cols, axis=1, inplace=True)
         elif chapter == 'alarm':
             df['units'] = [
                     data['state'][vy.alarm_to_state(r.Index)]['units']
                     for r in df.itertuples()]
-        print(df.to_markdown())
+        print(df.to_markdown(showindex=True))
         print('\n[[top]](#top)')
 
 def main():

@@ -18,6 +18,7 @@ LOG_INTERVAL:
   min: 1
   default: 300000 # 5 minutes
   max: 3600000 # 1 hour
+  resolution: 1
 MAX_LOG_SIZE:
   status: draft
   notes: Maximum log size
@@ -26,6 +27,7 @@ MAX_LOG_SIZE:
   min: 0
   max: 4294967295
   default: 10000
+  resolution: 1
 # Alarm settings:
 ALARM_SUSPEND_DURATION:
   status: draft
@@ -37,6 +39,7 @@ ALARM_SUSPEND_DURATION:
   min: 10
   max: 120
   default: 60
+  resolution: 1
 PATIENT_WEIGHT:
   status: draft
   notes: Patient weight
@@ -45,6 +48,7 @@ PATIENT_WEIGHT:
   min: 1
   max: 500
   default:
+  resolution: 0.1
 PATIENT_HEIGHT:
   status: draft
   notes: Patient height, required for calculating ideal body weight
@@ -53,6 +57,7 @@ PATIENT_HEIGHT:
   min: 15
   max: 250
   default:
+  resolution: 0.1
 PATIENT_GENDER:
   status: draft
   notes: Patient gender, required for calculating ideal body weight
@@ -61,12 +66,14 @@ PATIENT_GENDER:
   default: I
 IDEAL_BODY_WEIGHT:
   status: draft
-  notes: Ideal body weight
+  notes: >
+    Ideal body weight, used for expressing volumes in terms of ml per kg of ideal weight.
   units: kg
   sot: derived
   min: 1
   max: 250
   default: 70
+  resolution: 0.1
 ## Current settings:
 TV:
   status: draft
@@ -76,6 +83,7 @@ TV:
   min: 250 # Typically lower volumes, in children, use PCV
   max: 2000 # nb RMVS suggests 250-800 ml settable range
   default: 400 # per RMVS spec
+  resolution: 1
 SET_PI:
   status: draft
   notes: Desired inspiratory pressure (Pi),  [PSV, PCV]
@@ -84,6 +92,7 @@ SET_PI:
   min: -10 # negative values are observed in fault situations
   max: 40 #
   default: 20 # per RMVS spec
+  resolution: 1
 INSPIRATION_FLOW_TRIGGER:
   status: draft
   notes: inspiration trigger [PSV]
@@ -92,6 +101,7 @@ INSPIRATION_FLOW_TRIGGER:
   default: 2
   min: 0
   max: 10
+  resolution: 0.1
 INSPIRATION_P_TRIGGER:
   status: draft
   notes: inspiration trigger [PSV]
@@ -100,6 +110,7 @@ INSPIRATION_P_TRIGGER:
   min: 0.1
   max: 10.0
   default: 0.5
+  resolution: 0.1
 EXPIRATORY_TERMINATION_TRIGGER:
   status: draft
   notes: expiratory termination trigger (percent of peak inspiratory flow) (PSV)
@@ -108,6 +119,7 @@ EXPIRATORY_TERMINATION_TRIGGER:
   min: 0
   max: 99
   default: 25
+  resolution: 1
 INSPIRATORY_TIME:
   status: draft
   notes: inspiratory time (which together with respiratory rate imply IE)
@@ -116,6 +128,7 @@ INSPIRATORY_TIME:
   min: 100
   max: 30000
   default: 2000
+  resolution: 1
 MIN_RR:
   status: draft
   notes: In PCV and VCV modes this is the rate, however synchronised modes this value is the minimum rate.
@@ -124,6 +137,7 @@ MIN_RR:
   max: 60
   sot: operator
   default: 10
+  resolution: 1
 SET_PEEP:
   status: draft
   notes: PEEP
@@ -132,6 +146,7 @@ SET_PEEP:
   min: 0
   max: 40
   default: 5
+  resolution: 1
 SET_FIO2:
   status: draft
   notes: FiO2
@@ -140,6 +155,7 @@ SET_FIO2:
   min: 21
   max: 100
   default: 50
+  resolution: 1
 VENTILATION_MODE:
   status: draft
   notes:
@@ -155,6 +171,7 @@ BATTERY:
   units: percent
   min: 0
   max: 100
+  resolution: 1
 MAINS:
   status: draft
   notes: Mains electricity power supply status
@@ -162,6 +179,7 @@ MAINS:
   units: Volts
   min: 0
   max: 1000
+  resolution: 1
 POWER:
   status: draft
   notes: Combined battery and mains power status
@@ -169,6 +187,7 @@ POWER:
   units: percent
   min: 0
   max: 100
+  resolution: 1
 OXYGEN_LINE:
   status: draft
   notes: Oxygen supply line pressure
@@ -176,6 +195,7 @@ OXYGEN_LINE:
   units: mBar
   min: 0
   max: 10000
+  resolution: 1
 AIR_LINE:
   status: draft
   notes: Air supply line pressure
@@ -183,6 +203,7 @@ AIR_LINE:
   units: mBar
   min: 0
   max: 10000
+  resolution: 1
 TEMPERATURE:
   status: draft
   notes: Internal ventilator temperature
@@ -190,6 +211,7 @@ TEMPERATURE:
   units: Celsius
   min: 0
   max: 1000
+  resolution: 0.1
 P:
   status: draft
   notes: Observed circuit pressure
@@ -197,6 +219,7 @@ P:
   sot: derived
   min: -10 # negative values are observed in fault situations
   max: 200
+  resolution: 0.01
 RR:
   status: draft
   notes: Observed respiratory rate
@@ -204,6 +227,7 @@ RR:
   min: 0
   max: 60
   sot: derived
+  resolution: 0.01
 P1:
   status: draft
   notes: Primary pressure sensor value
@@ -211,6 +235,7 @@ P1:
   sot: sensor
   min: -10 # negative values are observed in fault situations
   max: 200
+  resolution: 0.01
 P2:
   status: draft
   notes: Secondary pressure sensor value
@@ -218,6 +243,7 @@ P2:
   sot: sensor
   min: -10 # negative values are observed in fault situations
   max: 200
+  resolution: 0.01
 FI:
   status: draft
   notes: Gas flow recorded by the inspiratory manifold sensor
@@ -225,6 +251,7 @@ FI:
   sot: sensor
   min: 0
   max: 200
+  resolution: 0.01
 FE:
   status: draft
   notes: Gas flow recorded by the expiratory manifold sensor
@@ -232,6 +259,7 @@ FE:
   sot: sensor
   min: 0
   max: 200
+  resolution: 0.01
 FLOW:
   status: draft
   notes: Gas flow recorded by both sensors and smoothed
@@ -239,6 +267,7 @@ FLOW:
   sot: derived
   min: -200
   max: 200
+  resolution: 0.01
 FO2:
   status: draft
   notes: Fraction of gas that is oxygen at the patient airway
@@ -246,6 +275,7 @@ FO2:
   sot: sensor
   min: 0
   max: 100
+  resolution: 0.1
 PCO2:
   status: draft
   notes: Partial pressure of CO2 measured at the patient airway
@@ -253,6 +283,7 @@ PCO2:
   sot: sensor
   min: 0
   max: 200
+  resolution: 1
 ## Derived values
 INSPIRING:
   status: draft
@@ -266,6 +297,7 @@ PI:
   sot: derived
   min: 0
   max: 200
+  resolution: 0.01
 PEAK_PI:
   status: draft
   notes: Peak observed pressure
@@ -273,6 +305,7 @@ PEAK_PI:
   sot: derived
   min: 0
   max: 200
+  resolution: 0.01
 PEEP:
   status: draft
   notes: PEEP
@@ -280,6 +313,7 @@ PEEP:
   sot: derived
   min: 0
   max: 200
+  resolution: 0.01
 TVI:
   status: draft
   notes: TVi
@@ -287,6 +321,7 @@ TVI:
   sot: derived
   min: 0
   max: 6000
+  resolution: 0.1
 TVE:
   status: draft
   notes: TVe
@@ -294,6 +329,7 @@ TVE:
   sot: derived
   min: 0
   max: 6000
+  resolution: 0.1
 MV:
   status: draft
   notes: Minute volume (the product of respiratory rate and tidal volume)
@@ -301,6 +337,7 @@ MV:
   sot: derived
   min: 0
   max: 60000
+  resolution: 1
 FIO2:
   status: draft
   notes: FiO2
@@ -308,6 +345,7 @@ FIO2:
   sot: derived
   min: 0
   max: 100
+  resolution: 1
 FEO2:
   status: draft
   notes: FeO2
@@ -315,6 +353,7 @@ FEO2:
   sot: derived
   min: 0
   max: 100
+  resolution: 1
 ETCO2:
   status: draft
   notes: EtCO2
@@ -322,6 +361,7 @@ ETCO2:
   sot: derived
   min: 0
   max: 100
+  resolution: 1
 ICO2:
   status: draft
   notes: inspired CO2 partial pressure
@@ -329,6 +369,7 @@ ICO2:
   sot: derived
   min: 0
   max: 100
+  resolution: 1
 # Logging:
 LAST_LOG_TIME:
   status: draft

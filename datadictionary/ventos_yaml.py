@@ -1,4 +1,4 @@
-import yaml, os, re, glob, math
+import yaml, os, re, glob, math, numbers
 
 dictionary_path = 'datadictionary'
 
@@ -53,23 +53,30 @@ meta_meta = {
             'max': {
                 'type': [int, float]},
             'default': {},
+            'resolution': {
+                'type': [int, float]},
             },
         'extra_checks': [
             # must have either unit or enum, but not both
             lambda k,i,m,d: must_have_n_of(i, ['units', 'enum']),
             # config and operator variables must have a default
             lambda k,i,m,d: must_have_n_of(i, ['default'], n=1) if i['sot'] in ['config', 'operator'] else False,
-            # must have min and max if not enum, Bool or time units
-            lambda k,i,m,d: must_have_n_of(i, ['max', 'min'], n=2) if
+            # must have resolution, min and max, if not enum, Bool or time units
+            lambda k,i,m,d: must_have_n_of(i, ['max', 'min', 'resolution'], n=3) if
                i.get('units', 'enum') not in ['Boolean', 'time', 'enum'] else False,
             # enum, Bool and time must not have min, max
-            lambda k,i,m,d: must_have_n_of(i, ['max', 'min'], n=0) if
+            lambda k,i,m,d: must_have_n_of(i, ['max', 'min', 'resolution'], n=0) if
                i.get('units', 'enum') in ['Boolean', 'time', 'enum'] else False,
             # enum must not have min, max
             lambda k,i,m,d: must_have_n_of(i, ['units'], n=0) if type(i.get('enum', None)) == list else False,
             # min must be less than max if present
             lambda k,i,m,d: f"min {i.get('min', False)} is not less than max {i.get('max', False)}" if
                     (not isinstance(i.get('min', False), bool)) and (i.get('min', -math.inf) >= i.get('max', math.inf)) else False,
+            # default must between min and max if numeric
+            lambda k,i,m,d: f"default {i['default']} not between {i['min']} and {i['max']}" if
+                (isinstance(i.get('default', False), numbers.Number) and
+                not (i.get('min', -math.inf) <= i.get('default', False) <= i.get('max', math.inf)))
+                else False,
             ],
         'key_regex': '^[A-Z]+([A-Z0-9])*(_[A-Z0-9]+)*$',
         },
@@ -91,7 +98,10 @@ meta_meta = {
             },
         'extra_checks': [
             # stripping the last underscore work (eg "_hi") must find a state value
-            lambda k,i,m,d: foreign_key(alarm_to_state(k), 'state', d)
+            lambda k,i,m,d: foreign_key(alarm_to_state(k), 'state', d),
+            # default must be between min and max
+            lambda k,i,m,d: f"default {i['default']} not between {i['min']} and {i['max']}"
+               if not (i['min'] <= i['default'] <= i['max']) else False,
             ],
         'key_regex': '^[A-Z0-9]+(_[A-Z0-9]+)*(_(HI|LOW|DIV|DIFF))$',
         },

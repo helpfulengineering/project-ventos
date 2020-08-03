@@ -110,9 +110,9 @@ FLOW_DIV:
     the time this is average overs. ilw
   source: [VentOS]
   status: proposed
-  default: 10
+  default: 100
   min: 100
-  max: 2000 # this is quite extreme
+  max: 200 # this is quite extreme
 FO2_DIV:
   notes: oxygen sensor divergence (fault or miscalibration)
   source: [VentOS]
