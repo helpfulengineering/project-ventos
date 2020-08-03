@@ -14,3 +14,26 @@ the [`package`](package.py) script.
 
 This is all a work in progress, and as the project evolves, so will these two
 scripts.
+
+Ulimately the tests will occur early in the integration pipeline, with the
+packaging occurring in later steps.
+
+# Development Tips
+
+Executing two seperate watches is seperate terminal windows makes editing the
+files easier, using these commands from the root directory of the project (NOT
+this directory):
+
+`devbin/watch.sh datadictionary "python3.7 datadictionary/package.py > ../ventosdoc/index.md"`
+
+and:
+
+`devbin/watch.sh datadictionary pytest`
+
+or
+
+`devbin/watch.sh datadictionary "pytest -sv"`
+
+If you would like a to see the console output of the tests.
+
+

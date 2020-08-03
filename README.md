@@ -31,6 +31,12 @@ If you have been helping one of the many existing ventilator teams we'd especial
 
 We have weekly team catch-ups via Zoom. Let us know if you'd like to attend.
 
+# The Data Dictionary
+
+This project stores as much meta data as possible within human editable, and machine readable YAML files.
+
+See the [Data Dictionary README](/datadictionary/README.md) for more details.
+
 # Quick links
 
 * [Positions vacant](https://docs.google.com/document/d/1zuPdXqJ_gFg4drvJkdByst1vagz60usFGL3S3l_cO4A/edit?usp=sharing)

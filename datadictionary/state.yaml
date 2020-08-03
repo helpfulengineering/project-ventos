@@ -47,7 +47,7 @@ PATIENT_WEIGHT:
   default:
 PATIENT_HEIGHT:
   status: draft
-  notes: Patient height
+  notes: Patient height, required for calculating ideal body weight
   units: cm
   sot: operator
   min: 15
@@ -55,7 +55,7 @@ PATIENT_HEIGHT:
   default:
 PATIENT_GENDER:
   status: draft
-  notes: Patient gender
+  notes: Patient gender, required for calculating ideal body weight
   enum: [M, F, I]
   sot: operator
   default: I
