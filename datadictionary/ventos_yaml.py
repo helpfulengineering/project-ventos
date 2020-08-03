@@ -1,4 +1,4 @@
-import yaml, os, re, glob
+import yaml, os, re, glob, math
 
 dictionary_path = 'datadictionary'
 
@@ -41,9 +41,12 @@ meta_meta = {
                     'ml', 'kg', 'cm', 'percent', 'ml/minute',
                     'Volts', 'Celsius',
                     'Boolean', 'kilobytes'],},
-            'enum': {},
-            'min': {},
-            'max': {},
+            'enum': {
+                'type': [list]},
+            'min': {
+                'type': [int, float]},
+            'max': {
+                'type': [int, float]},
             'default': {},
             },
         'extra_checks': [
@@ -51,6 +54,17 @@ meta_meta = {
             lambda k,i,m,d: must_have_n_of(i, ['units', 'enum']),
             # config and operator variables must have a default
             lambda k,i,m,d: must_have_n_of(i, ['default'], n=1) if i['sot'] in ['config', 'operator'] else False,
+            # must have min and max if not enum, Bool or time units
+            lambda k,i,m,d: must_have_n_of(i, ['max', 'min'], n=2) if
+               i.get('units', 'enum') not in ['Boolean', 'time', 'enum'] else False,
+            # enum, Bool and time must not have min, max
+            lambda k,i,m,d: must_have_n_of(i, ['max', 'min'], n=0) if
+               i.get('units', 'enum') in ['Boolean', 'time', 'enum'] else False,
+            # enum must not have min, max
+            lambda k,i,m,d: must_have_n_of(i, ['units'], n=0) if type(i.get('enum', None)) == list else False,
+            # min must be less than max if present
+            lambda k,i,m,d: f"min {i.get('min', False)} is not less than max {i.get('max', False)}" if
+                    (not isinstance(i.get('min', False), bool)) and (i.get('min', -math.inf) >= i.get('max', math.inf)) else False,
             ],
         'key_regex': '^[A-Z]+([A-Z0-9])*(_[A-Z0-9]+)*$',
         },
@@ -64,6 +78,7 @@ meta_meta = {
                 }},
         'optional': {},
         'extra_checks': [
+            # stripping the last underscore work (eg "_hi") must find a state value
             lambda k,i,m,d: foreign_key(k.rsplit('_', 1)[0], 'state', d)
             ],
         'key_regex': '^[A-Z0-9]+(_[A-Z0-9]+)*(_(HI|LOW|DIV|DIFF))$',

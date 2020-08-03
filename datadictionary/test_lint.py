@@ -37,10 +37,14 @@ def test_lint():
                 if enum and val not in enum:
                     log(f'#### unknown "{field}" value: "{val}" expecting one of {enum}')
                     errors +=1
+                field_type = field_meta.get('type', False)
+                if field_type and type(val) not in field_type:
+                    log(f'#### bad "{field}" type: "{val}" got {type(val)} expecting {field_type}')
+                    errors +=1
             for extra_check in meta.get('extra_checks', []):
-                extra_errors = extra_check(key, fields, meta, data)
-                if extra_errors:
-                    log(f'#### {key} -"{extra_errors}"')
+                extra_error = extra_check(key, fields, meta, data)
+                if extra_error:
+                    log(f'#### {key} -"{extra_error}"')
                     errors +=1
 
         total_errors += errors
