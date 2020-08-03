@@ -52,4 +52,4 @@ def test_lint():
 
 def test_package():
     import package
-    print('ok')
+    package.main()
