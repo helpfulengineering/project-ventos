@@ -36,6 +36,10 @@ def print_main_md(data):
                             else f"({r.min}-{r.max}) ") + f"{r.units}")
                     for r in df.itertuples()]
             df.drop(range_cols, axis=1, inplace=True)
+        elif chapter == 'alarm':
+            df['units'] = [
+                    data['state'][vy.alarm_to_state(r.Index)]['units']
+                    for r in df.itertuples()]
         print(df.to_markdown())
         print('\n[[top]](#top)')
 

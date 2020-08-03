@@ -19,107 +19,190 @@
 #ideal on, but user may disable (leading to on-screen alert to user)
 #optional - off by default, user may anable
 BATTERY_LOW:
-  notes: Battery status info/warning/alarm/critical (?? % or volts)
+  notes: Battery status info/warning/alarm/critical
   source: [RMVS 1.a]
   status: core
+  default: 40
+  min: 10
+  max: 90
 MAINS_LOW:
   notes: Mains power failure (seconds delay)
   source: [RMVS 1.a]
   status: proposed
+  default: 90
+  min: 80
+  max: 99
 POWER_LOW:
   notes: Complete loss of power imminent, as both mains and battery unavailable. This is emergency if in mandatory ventilaton mode.
   source: [RMVS 1.a, RMVS 1.b]
   status: proposed
+  default: 40
+  min: 10
+  max: 90
 OXYGEN_LINE_LOW:
-  notes: Oxygen supply failure (mBar - eg 3000)
+  notes: Oxygen supply failure (eg 3000)
   source: [RMVS 1.a]
   status: core
+  default: 3500
+  min: 500
+  max: 4000
 AIR_LINE_LOW:
-  notes: Air supply failure (mBar - eg 3000)
+  notes: Air supply failure (eg 3000)
   source: [RMVS 1.a]
   status: core
+  default: 3500
+  min: 500
+  max: 4000
 PEAK_PI_HI:
-  notes: Instantaneous over-pressure (cmH2O) - a single reading triggers alarm
+  notes: Instantaneous over-pressure - a single reading triggers alarm
   source: [RMVS 1.c]
   status: core
+  default: 40
+  min: 20
+  max: 60
 PI_HI:
   notes: Sustained over-pressure (seconds and cmH2O - eg over 30cmH2O for 5 seconds) - ie a PEEP high alarm
   source: [RMVS 1.c]
   status: proposed
+  default: 35
+  min: 20
+  max: 60
 PI_LOW:
   notes: Potential disconnect
   source: [RMVS 1.d]
   status: core
+  default: 14
+  min: 8
+  max: 35
 PEEP_LOW:
   notes: Potential disconnect
   source: [RMVS 1.d]
   status: core
+  default: 2
+  min: 0
+  max: 20
 TV_LOW:
-  notes: Tidal volume low
+  notes: Tidal volume low ilw
   source: [RMVS 1.d]
   status: core
+  default: 300
+  min: 100
+  max: 500
 TV_HI:
-  notes: Tidal volume high
+  notes: Tidal volume high ilw
   source: [RMVS 1.d]
   status: core
+  default: 800
+  min: 400
+  max: 2000 # this is quite extreme
 P_DIV:
-  notes: pressure sensor divergence (fault or miscalibration) cmH2O
+  notes: >
+    Pressure sensor divergence (fault or miscalibration). This value is quite
+    dependant on smoothing.
   source: [VentOS]
   status: proposed
+  default: 2
+  min: 0.1
+  max: 20 # this is quite extreme
 FLOW_DIV:
-  notes: flow sensor divergence (fault or miscalibration, ) ml/minute
+  notes: >
+    Flow sensor divergence (fault, miscalibration, or lead). Dependant on
+    the time this is average overs. ilw
   source: [VentOS]
   status: proposed
+  default: 10
+  min: 100
+  max: 2000 # this is quite extreme
 FO2_DIV:
-  notes: oxygen sensor divergence (fault or miscalibration), absolute %
+  notes: oxygen sensor divergence (fault or miscalibration)
   source: [VentOS]
   status: proposed
+  default: 10
+  min: 1
+  max: 20
 MV_HI:
-  notes: minute volume high (ml)
+  notes: Minute volume high. Ideally this is interpreted via ideal weight.
   source: [VentOS]
   status: proposed
+  default: 10000
+  min: 1000
+  max: 20000
 MV_LOW:
-  notes: minute volume low (ml)
+  notes: Minute volume low. ilw
   source: [VentOS]
   status: proposed
+  default: 2000
+  min: 400
+  max: 20000
 ETCO2_HI:
-  notes: etCO2 high (mmHg)
+  notes: etCO2 high
   source: [VentOS]
   status: proposed
+  default: 50
+  min: 25
+  max: 80
 ETCO2_LOW:
-  notes: etCO2 low (mmHg)
+  notes: etCO2 low
   source: [VentOS]
   status: proposed
+  default: 30
+  min: 20
+  max: 60
 FIO2_HI:
-  notes: FiO2 low (%)
+  notes: >
+    FiO2 low. Ideally this time sensitive, with high FiO2 tolerated briefly.
   source: [VentOS]
   status: proposed
+  default: 60
+  min: 21
+  max: 100
 FIO2_LOW:
-  notes: FiO2 low (%)
+  notes: FiO2 low
   source: [VentOS]
   status: proposed
+  default: 25
+  min: 21
+  max: 99
 RR_HI:
-  notes: respiratory rate high (BPM)
+  notes: Respiratory rate high. Younger patients may require a higher rate.
   source: [VentOS]
   status: proposed
+  default: 25
+  min: 8
+  max: 80
 RR_LOW:
-  notes: respiratory rate low (BPM) (apnoea) (seconds) (unsigned int)
+  notes: Respiratory rate low (apnoea) (seconds)
   source: [VentOS]
   status: proposed
+  default: 8
+  min: 6
+  max: 40
 TV_DIFF:
-  notes: tidal volume difference from setting (VCV/PRVC)
+  notes: Tidal volume difference from setting (VCV/PRVC)
   source: [VentOS]
   status: proposed
+  default: 100
+  min: 10
+  max: 400
 PI_DIFF:
-  notes: Pi different from setting (PCV/PSV)
+  notes: Pi different from setting (PCV/PSV), ie machine did not achieve goal.
   source: [VentOS]
   status: proposed
+  default: 5
+  min: 1
+  max: 30
 RR_DIFF:
-  notes: RR difference from setting (BPM)
+  notes: RR difference from setting
   source: [VentOS]
   status: proposed
+  default: 5
+  min: 1
+  max: 10
 TEMPERATURE_HI:
-  notes: overheating (degrees c)
+  notes: Overheating
   source: [VentOS]
   status: proposed
+  default: 70
+  min: 25
+  max: 200
 

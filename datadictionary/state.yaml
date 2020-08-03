@@ -268,7 +268,7 @@ PI:
   max: 200
 PEAK_PI:
   status: draft
-  notes: Pi
+  notes: Peak observed pressure
   units: cmH2O
   sot: derived
   min: 0

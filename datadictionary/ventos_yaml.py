@@ -27,6 +27,11 @@ def foreign_key(key, foreign, data):
     return f'key {key} not found in {foreign}' \
             if key not in data[foreign].keys() else False
 
+# trim off the last word in the key, converting an alarm id to
+# a state key
+def alarm_to_state(key):
+    return key.rsplit('_', 1)[0]
+
 meta_meta = {
     'state': {
         'required': {
@@ -76,10 +81,17 @@ meta_meta = {
                 },
             'source': {
                 }},
-        'optional': {},
+        'optional': {
+            'min': {
+                'type': [int, float]},
+            'max': {
+                'type': [int, float]},
+            'default': {
+                'type': [int, float]},
+            },
         'extra_checks': [
             # stripping the last underscore work (eg "_hi") must find a state value
-            lambda k,i,m,d: foreign_key(k.rsplit('_', 1)[0], 'state', d)
+            lambda k,i,m,d: foreign_key(alarm_to_state(k), 'state', d)
             ],
         'key_regex': '^[A-Z0-9]+(_[A-Z0-9]+)*(_(HI|LOW|DIV|DIFF))$',
         },
