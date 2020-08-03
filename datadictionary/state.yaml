@@ -12,7 +12,7 @@
 # Log settings
 LOG_INTERVAL:
   status: draft
-  notes: Desired logging interval
+  notes: Desired interval between writes to system log
   units: miliseconds
   sot: config
   min: 1
@@ -70,7 +70,7 @@ IDEAL_BODY_WEIGHT:
 ## Current settings:
 TV:
   status: draft
-  notes: tidal volume [VCV, PRVC]
+  notes: Desired tidal volume [VCV, PRVC]
   units: ml
   sot: operator
   min: 250 # Typically lower volumes, in children, use PCV
@@ -78,7 +78,7 @@ TV:
   default: 400 # per RMVS spec
 SET_PI:
   status: draft
-  notes: Pi,  [PSV, PCV]
+  notes: Desired inspiratory pressure (Pi),  [PSV, PCV]
   units: cmH2O
   sot: operator
   min: -10 # negative values are observed in fault situations
@@ -157,7 +157,7 @@ BATTERY:
   max: 100
 MAINS:
   status: draft
-  notes: Mains status
+  notes: Mains electricity power supply status
   sot: sensor
   units: Volts
   min: 0
@@ -171,21 +171,21 @@ POWER:
   max: 100
 OXYGEN_LINE:
   status: draft
-  notes: Oxygen line pressure
+  notes: Oxygen supply line pressure
   sot: sensor
   units: mBar
   min: 0
   max: 10000
 AIR_LINE:
   status: draft
-  notes: Air line pressure
+  notes: Air supply line pressure
   sot: sensor
   units: mBar
   min: 0
   max: 10000
 TEMPERATURE:
   status: draft
-  notes: Internal temperature
+  notes: Internal ventilator temperature
   sot: sensor
   units: Celsius
   min: 0
@@ -199,7 +199,7 @@ P:
   max: 200
 RR:
   status: draft
-  notes:
+  notes: Observed respiratory rate
   units: BPM
   min: 0
   max: 60
@@ -220,35 +220,35 @@ P2:
   max: 200
 FI:
   status: draft
-  notes: flow recorded by the inspiratory manifold sensor
+  notes: Gas flow recorded by the inspiratory manifold sensor
   units: ml/minute
   sot: sensor
   min: 0
   max: 200
 FE:
   status: draft
-  notes: flow recorded by the expiratory manifold sensor
+  notes: Gas flow recorded by the expiratory manifold sensor
   units: ml/minute
   sot: sensor
   min: 0
   max: 200
 FLOW:
   status: draft
-  notes: flow recorded by both sensors and smoothed
+  notes: Gas flow recorded by both sensors and smoothed
   units: ml/minute
   sot: derived
   min: -200
   max: 200
 FO2:
   status: draft
-  notes: fraction of gas that is oxygen at the patient airway
+  notes: Fraction of gas that is oxygen at the patient airway
   units: percent
   sot: sensor
   min: 0
   max: 100
 PCO2:
   status: draft
-  notes: partial pressure of CO2 measured at the patient airway
+  notes: Partial pressure of CO2 measured at the patient airway
   units: mmHg
   sot: sensor
   min: 0
