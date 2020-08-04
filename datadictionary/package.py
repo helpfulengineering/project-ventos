@@ -6,6 +6,7 @@ import ventos_yaml as vy
 def snake_to_title(key):
     return key.replace('_', ' ').title()
 
+
 def print_main_md(data):
     # create a URL just by joining a list eg [state, peep] => state_peep
     url = lambda i : "_".join(i)
@@ -36,19 +37,20 @@ def print_main_md(data):
         # modify the data-frame to make it prettier and add links and achnors
         if chapter == 'state':
             # make a pretty cell
-            range_cols = ['min', 'max', 'units', 'enum', 'default']
-            df['values'] = [
-                    ("" if pd.isnull(r.default) else f"{r.default} " ) +
-                    (f"({', '.join(r.enum)}) " if type(r.enum)==list
-                        else ('' if r.units in ['time', 'Boolean']
-                            else f"({r.min}-{r.max}) ") + f"{r.units}")
+            # calculate precision
+            df['significant_digits'] = [(max(0, -round(math.log10(r.resolution)))
+                    if vy.isNumber(r.resolution) else 0)
                     for r in df.itertuples()]
+            df['values'] = [vy.pretty_values(r) for r in df.itertuples()]
+            df['c_type'] = [vy.c_type(r) for r in df.itertuples()]
             # create a list of alarms this property links to
             df['alarms'] = [
                     ', '.join([f"[{k}](#{url(['alarm', k])})" for k in data['alarm'].keys()
                                  if re.match(f"{r.Index}_[A-Z]*", k)])
                     for r in df.itertuples()]
+            range_cols = ['min', 'max', 'units', 'enum', 'default', 'significant_digits', 'resolution']
             df.drop(range_cols, axis=1, inplace=True)
+            #print(df[['significant_digits', 'values', 'default', 'c_type']].to_markdown())
         elif chapter == 'alarm':
             # link back to the alarm state
             df['state'] = [link(['state', vy.alarm_to_state(r.Index)]) for r in df.itertuples()]
@@ -66,4 +68,5 @@ def main():
 
 if __name__ == "__main__":
     main()
+
 

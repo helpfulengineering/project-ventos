@@ -1,4 +1,6 @@
 import yaml, os, re, glob, math, numbers
+import pandas as pd
+from collections import namedtuple
 
 dictionary_path = 'datadictionary'
 
@@ -32,6 +34,44 @@ def foreign_key(key, foreign, data):
 def alarm_to_state(key):
     return key.rsplit('_', 1)[0]
 
+def isNumber(i):
+    return isinstance(i, numbers.Number)and not math.isnan(i)
+
+def pretty_values(r):
+    return ("" if pd.isnull(r.default)
+               else f"{r.default:.{r.significant_digits}f} " if isNumber(r.default)
+               else f"{r.default} "
+           ) + (
+            f"({', '.join(r.enum)}) " if type(r.enum)==list
+            else ('' if r.units in ['time', 'Boolean']
+                else f"({r.min:.{r.significant_digits}f}-{r.max:.{r.significant_digits}f} "
+                f'step {r.resolution:g}) '
+                )
+            + f"{r.units}")
+
+allowed_c_types = ['bool', 'enum', 'byte', 'int', 'unsigned int', 'long', 'unsigned long']
+
+def c_type(r):
+    if type(r) == dict: # this is a horrible hack
+        r = namedtuple('x', r.keys())(*r.values())
+    if r.sot == 'timestamp':
+        return 'unsigned long'
+    elif hasattr(r, 'enum') and type(r.enum)==list:
+        return 'enum'
+    if r.units == 'Boolean':
+        return 'bool'
+    elif isNumber(r.resolution):
+        max_value = r.max/r.resolution
+        min_value = r.min/r.resolution
+        signed = min_value < 0
+        size = max(max_value, abs(min_value)) * (2 if signed else 1)
+        assert size <= 4294967295
+        base = 'long' if size > 65535 else 'int' if size > 255 or signed else 'byte'
+        return f"{'' if signed else 'unsigned ' if base != 'byte' else ''}{base}"
+    else:
+        return 'error'
+
+
 meta_meta = {
     'state': {
         'required': {
@@ -64,7 +104,7 @@ meta_meta = {
             # must have resolution, min and max, if not enum, Bool or time units
             lambda k,i,m,d: must_have_n_of(i, ['max', 'min', 'resolution'], n=3) if
                i.get('units', 'enum') not in ['Boolean', 'time', 'enum'] else False,
-            # enum, Bool and time must not have min, max
+            # enum, Bool and time must not have min, max, or resolution
             lambda k,i,m,d: must_have_n_of(i, ['max', 'min', 'resolution'], n=0) if
                i.get('units', 'enum') in ['Boolean', 'time', 'enum'] else False,
             # enum must not have min, max
@@ -77,6 +117,9 @@ meta_meta = {
                 (isinstance(i.get('default', False), numbers.Number) and
                 not (i.get('min', -math.inf) <= i.get('default', False) <= i.get('max', math.inf)))
                 else False,
+            # must have valid c type
+            lambda k,i,m,d: f"invalid C type {c_type(i)}" if
+                c_type(i) not in allowed_c_types else False,
             ],
         'key_regex': '^[A-Z]+([A-Z0-9])*(_[A-Z0-9]+)*$',
         },

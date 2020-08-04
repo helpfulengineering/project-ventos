@@ -12,9 +12,12 @@ def test_all_files_have_meta():
 def test_lint():
     data = vy.load_yaml()
     # generic linting
-    total_errors = 0
+    error = {}
+    def log_error(key_list, err):
+        key = '-'.join(key_list)
+        error[key] = error.get(key, [])
+        error[key].append(err)
     for f, meta in vy.meta_meta.items(): # loop over files
-        errors = 0
         required = meta['required']
         allowed = {**required, **meta['optional']}
         key_pattern = re.compile(meta['key_regex'])
@@ -23,36 +26,28 @@ def test_lint():
             missing = required.keys() - fields.keys()
             if len(missing) + len(extra):
                 if len(missing):
-                    errors +=1
-                    log(f'missing: {missing}')
+                    log_error([f, key], f'missing: {missing}')
                 if len(extra):
-                    errors +=1
-                    log(f'extra: {extra}')
+                    log_error([f, key], f'extra: {extra}')
             if not key_pattern.match(key):
-                errors +=1
-                log(f"#### key: {key} does not match {meta['key_regex']}")
+                log_error([f, key],
+                    f"#### key: {key} does not match {meta['key_regex']}")
             for field, val in fields.items():
                 field_meta = allowed.get(field, {})
                 enum = field_meta.get('enum', False)
                 if enum and val not in enum:
-                    log(f'#### unknown "{field}" value: "{val}" expecting one of {enum}')
-                    errors +=1
+                    log_error([f, key, field],
+                    f'#### unknown value: "{val}" expecting one of {enum}')
                 field_type = field_meta.get('type', False)
                 if field_type and type(val) not in field_type:
-                    log(f'#### bad "{field}" type: "{val}" got {type(val)} expecting {field_type}')
-                    errors +=1
+                    log_error([f, key, field],
+                    f'#### bad type: "{val}" got {type(val)} expecting {field_type}')
             for extra_check in meta.get('extra_checks', []):
                 extra_error = extra_check(key, fields, meta, data)
                 if extra_error:
-                    log(f'#### {key} -"{extra_error}"')
-                    errors +=1
+                    log_error([f, key], f'#### "{extra_error}"')
 
-        total_errors += errors
-        log(f'### {f} errors {errors}')
-    log(f'### total errors {total_errors}')
-
-    assert total_errors == 0
-
+    assert error == {}
 
 def test_package():
     import package
