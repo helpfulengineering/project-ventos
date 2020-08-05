@@ -1,0 +1,93 @@
+MAIN:
+  name: Main system orchestrator
+  functions:
+    - Root of operations
+    - Call START, then LOOP while true, then finally STOP
+  called_by: root
+  returns: void
+START:
+  name: Start-up manager
+  notes: >
+    * todo should this be `setup` or `init` ?
+  functions:
+    - Manages system initiation sequence
+    - Initialises `state`
+  called_by: MAIN
+  returns: void
+LOOP:
+  name: Main operating loop
+  notes: >
+    * todo clarify event handling wrt alarms
+    * todo confirm return value
+    * todo where does heart-beat live
+  functions:
+    - Manages system during operations
+    - Calls multiple functions
+    - Returns false to end the operational loop and enter terminal shut-down
+  called_by: MAIN
+  returns: bool
+STOP:
+  name: Shut-down manager
+  notes: >
+    Begins an irrervible shut-down procedure after user has confirmed.
+  functions:
+    - Manages system shutdown operation
+  called_by: MAIN
+  returns: void
+CHECK:
+  name: System health checker
+  notes: >
+    * todo need to clarify how this differs from ALARM
+  functions:
+    - Perform system check
+  called_by: LOOP
+  returns: void
+ALARM:
+  name: Alarm manager
+  functions:
+    - Manages alarm state
+  called_by: LOOP
+  returns: void
+SENSE:
+  name: Senor reader
+  functions:
+    - Reads all sensors
+  called_by: LOOP
+  returns: void
+THINK:
+  name: Signal interpreter
+  notes: >
+    todo called "PID algorithm" in v0.3 of architecture
+  functions:
+    - Advance siganl processing algorithms
+  called_by: LOOP
+  returns: void
+DRIVE:
+  name: Actuator driver
+  notes: todo called "actuator controller" in v0.3 of architecture
+  functions:
+    - Advance siganl processing algorithms
+  called_by: LOOP
+  returns: void
+LOG:
+  name: Logger
+  notes:
+  functions:
+    - Writes current status to logs
+    - Rotates logs when the get too big
+  called_by: loop
+  returns: void
+DISPLAY:
+  name: Display manager
+  notes: todo called "UI write" in v0.3 of architecture
+  functions:
+    - Update display
+  called_by: LOOP
+  returns: void
+READ:
+  name: Operator input reader
+  notes: todo called "UI read" in v0.3 of architecture
+  functions:
+    - process input from buttons and other user devices
+  called_by: LOOP
+  returns: void
