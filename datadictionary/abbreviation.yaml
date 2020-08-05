@@ -14,6 +14,9 @@ CMV:
 ET:
   full: end-tidal
   source: VentOS
+EXP:
+  full: expiratory or during expiration or exhalation
+  source: VentOS
 Fi:
   full: fraction inspired
   source: VentOS
@@ -21,6 +24,9 @@ Fi02:
   full: fraction of inspired oxygen
   definition: concentration of oxygen in the gas mixture that the patient inhales
   source: RMVS
+INSP:
+  full: inspiratory
+  source: VentOS
 IPPV:
   full: intermittent positive pressure ventilation
   definition: A mandatory invasive ventilation mode used to replacea patient’sbreathing when they cannot for themselves. Can be either volume controlled or pressure controlled. It does not synchronise any patient breathing efforts.

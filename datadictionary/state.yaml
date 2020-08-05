@@ -102,7 +102,7 @@ INSPIRATION_FLOW_TRIGGER:
   min: 0
   max: 10
   resolution: 0.1
-INSPIRATION_P_TRIGGER:
+INSP_P_TRIGGER:
   status: draft
   notes: inspiration trigger [PSV]
   units: cmH2O
@@ -111,7 +111,7 @@ INSPIRATION_P_TRIGGER:
   max: 10.0
   default: 0.5
   resolution: 0.1
-EXPIRATORY_TERMINATION_TRIGGER:
+EXP_TERMINATION_TRIGGER:
   status: draft
   notes: expiratory termination trigger (percent of peak inspiratory flow) (PSV)
   units: percent
@@ -120,7 +120,7 @@ EXPIRATORY_TERMINATION_TRIGGER:
   max: 99
   default: 25
   resolution: 1
-INSPIRATORY_TIME:
+INSP_TIME:
   status: draft
   notes: inspiratory time (which together with respiratory rate imply IE)
   units: miliseconds

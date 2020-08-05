@@ -146,7 +146,8 @@ meta_meta = {
             lambda k,i,m,d: f"default {i['default']} not between {i['min']} and {i['max']}"
                if not (i['min'] <= i['default'] <= i['max']) else False,
             ],
-        'key_regex': '^[A-Z0-9]+(_[A-Z0-9]+)*(_(HI|LOW|DIV|DIFF))$',
+        #
+        'key_regex': '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*(_(HI|LOW|DIV|DIFF))$',
         },
     'alarm_level': {
         'required': {
@@ -157,6 +158,25 @@ meta_meta = {
                  }},
         'optional': {},
         'key_regex': '^[A-Z]+$',
+        },
+    'mode': {
+        'required': {'full': {},
+                 },
+        'optional': {
+            'notes': {},
+                 },
+        'key_regex': '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$',
+        },
+    'capability': {
+        'required': {
+            'status': {
+                'enum': ['possible', 'optional', 'desirable', 'required']
+                }
+                 },
+        'optional': {
+            'notes': {},
+                 },
+        'key_regex': '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$',
         },
     'abbreviation': {
         'required': {'full': {},

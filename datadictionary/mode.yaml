@@ -1,0 +1,9 @@
+PCV:
+  full: pressure controlled ventilation
+PRVC:
+  full: pressure regulated volume controlled
+  notes: A mode of ventilation where a set tidal volume is delivered to the patient while maintain the lowest pressure possible in the airway, to avtrauma.
+VCV:
+  full: volume controlled ventilation
+PSV:
+  full: pressure support ventilation

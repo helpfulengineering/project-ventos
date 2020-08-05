@@ -1,0 +1,78 @@
+
+PCV_MODE:
+  status: required
+PRVC_MODE:
+  notes: A mode of ventilation where a set tidal volume is delivered to the patient while maintain the lowest pressure possible in the airway, to avtrauma.
+  status: desirable
+VCV_MODE:
+  status: optional
+PSV_MODE:
+  status: desirable
+LOGGING:
+  notes: Ventilator is able to write to a semi-permanent data log.
+  status: desirable
+VISUAL_ALARM:
+  status: required
+AUDITORY_ALARM:
+  status: required
+DATA_ENTRY:
+  notes: >
+    Enables an operator to enter parameters such as patient height, weight and
+    gender, as well as, potentiall, other observations.
+  status: desirable
+VOLUME_VENTILATION:
+  notes: Required for VCV_MODE
+  status: desirable
+INSP_FLOW_SENSOR:
+  notes: >
+    This unidirectional sensor typically lives in the ventilator in the
+    inspiratory limb, and thus only measures flow during inspiration.
+  status: required
+ELECTRONIC_PEEP_VALVE:
+  status: desirable
+EXP_FLOW_SENSOR:
+  notes: >
+    This unidirectional sensor typically lives in the ventilator in the
+    expiratory limb, and thus only measures flow during inspiration.
+  status: required
+AIRWAY_FLOW_SENSOR:
+  notes: >
+    This bidirectional sensor typically lives close to the patient, and
+    thus measures both inspiratory and expiratory flow.
+  status: possible
+PRIMARY_P_SENSOR:
+  notes: >
+    Measures inspiratory and expiratory pressure experienced by the
+    patient.
+  status: required
+AIRWAY_CO2_SENSOR:
+  notes: >
+    This capability is required, however it may not be integrated into the
+    ventilator. The single sensor, by sampling gas at the patient end of the
+    circuit is able to measure both inspired and expired CO2 concentration.
+  status: desirable
+AIRWAY_OXYGEN_SENSOR:
+  notes: >
+    This capability is required, however it may not be integrated into the
+    ventilator.
+  status: desirable
+INSP_OXYGEN_SENSOR:
+  notes: This device is only able to sample inspired oxygen concentration.
+  status: possible
+BATTERY_SENSOR:
+  notes: Required but potentially not integrated.
+  status: desirable
+MAINS_SENSOR:
+  notes: Required but potentially not integrated.
+  status: desirable
+OXYGEN_LINE_SENSOR:
+  notes: Pressure monitor. Required but potentially not integrated.
+  status: desirable
+AIR_LINE_SENSOR:
+  notes: Pressure monitor. Required but potentially not integrated.
+  status: desirable
+TEMPERATURE_SENSOR:
+  notes: Monitors internal device temperature.
+  status: possible
+
+
