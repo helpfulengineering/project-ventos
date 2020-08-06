@@ -2,6 +2,18 @@
 test:
 	pytest
 
+lint:
+	pylint datadictionary/*.py
+
+# Watch processes that use script taking
+# 1 - path to watch
+# 2 - command to run
+dev-watch-test:
+	devbin/watch.sh datadictionary "make test"
+
+dev-watch-lint:
+	devbin/watch.sh datadictionary "make lint"
+
 dev-watch-yaml:
 	devbin/watch.sh datadictionary "python3.7 datadictionary/package.py --vv"
 
