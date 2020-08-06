@@ -14,8 +14,8 @@ class UniqueKeyLoader(yaml.SafeLoader):
             mapping.append(key)
         return super().construct_mapping(node, deep)
 
-def yaml_file(name):
-    return os.path.join(dictionary_path, f'{name}.yaml')
+def yaml_file(path, name):
+    return os.path.join(path, f'{name}.yaml')
 
 # compare the fields i an item to a list to see if we have
 # interchangeable fields
@@ -49,7 +49,7 @@ def pretty_values(r):
                 )
             + f"{r.units}")
 
-allowed_c_types = ['bool', 'enum', 'byte', 'int', 'unsigned int', 'long', 'unsigned long']
+allowed_c_types = ['void', 'bool', 'enum', 'byte', 'int', 'unsigned int', 'long', 'unsigned long']
 
 def c_type(r):
     if type(r) == dict: # this is a horrible hack
@@ -167,6 +167,18 @@ meta_meta = {
                  },
         'key_regex': '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$',
         },
+    'module': {
+        'required': {
+            'name': {},
+            'called_by': {},
+            'functions': {},
+            'returns': {'enum': allowed_c_types}
+                 },
+        'optional': {
+            'notes': {}
+                 },
+        'key_regex': '^[A-Z][A-Z0-9]*(_[A-Z0-9]+)*$',
+        },
     'capability': {
         'required': {
             'status': {
@@ -189,10 +201,10 @@ meta_meta = {
 }
 
 # load the entire metadata into memory and return
-def load_yaml():
+def load_yaml(source_dir=dictionary_path):
     data = {}
     for f, meta in meta_meta.items(): # loop over files
-        yaml_text = open(yaml_file(f), 'r')
+        yaml_text = open(yaml_file(source_dir, f), 'r')
         data[f] = yaml.load(yaml_text, Loader=UniqueKeyLoader)
     return data
 

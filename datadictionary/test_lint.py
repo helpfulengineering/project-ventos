@@ -5,7 +5,7 @@ log = print
 
 def test_all_files_have_meta():
     base = lambda f: os.path.splitext(os.path.basename(f))[0]
-    dictionary_yaml_glob = glob.glob(vy.yaml_file('*'))
+    dictionary_yaml_glob = glob.glob(vy.yaml_file(vy.dictionary_path, '*'))
     files = [base(f) for f in dictionary_yaml_glob]
     assert set(files) == set(vy.meta_meta.keys())
 
@@ -46,9 +46,10 @@ def test_lint():
                 extra_error = extra_check(key, fields, meta, data)
                 if extra_error:
                     log_error([f, key], f'#### "{extra_error}"')
-
     assert error == {}
 
+# Note this test does not include writing the files or verifying file timestamps or size etc
 def test_package():
     import package
-    package.main()
+
+    package.main({'sourcedir': vy.dictionary_path, 'job': ['All']})

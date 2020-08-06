@@ -3,7 +3,7 @@ MAIN:
   functions:
     - Root of operations
     - Call START, then LOOP while true, then finally STOP
-  called_by: root
+  called_by: ROOT
   returns: void
 START:
   name: Start-up manager
