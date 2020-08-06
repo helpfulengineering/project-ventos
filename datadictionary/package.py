@@ -4,7 +4,7 @@ import re
 import argparse
 import math
 import os
-from textwrap import dedent
+from textwrap import dedent, wrap
 import pandas as pd
 import ventos_yaml as vy
 
@@ -92,7 +92,7 @@ def make_md(yaml_data):
     markdown = []
     markdown.append(
         dedent(f"""
-    <!-- {AUTO_GENERATED_NOTICE} ->
+    <!-- {AUTO_GENERATED_NOTICE} -->
     # <a name='top'></a>Introduction
     This is human readable the contents of the draft VentOS meta database.
 
@@ -122,16 +122,20 @@ def make_md(yaml_data):
 
 def make_c(yaml_data):
     """ Make C files from yaml. Currently returns text, but that will need to change."""
+    def comment(text):
+        pre = '      // '
+        return pre + ('\n'+ pre).join(wrap(text, width=70)) + '\n' if text else ''
+    def format_vars(rec):
+        return comment(rec.notes) + f"      {rec.c_type} {rec.Index};"
     dfs = meta_to_dataframes(yaml_data, pretty=False)
     state_vars = "\n" + "\n".join(
-        [f"      {r.c_type} {r.Index};" for r in dfs['state'].itertuples()])
+        [format_vars(rec) for rec in dfs['state'].itertuples()])
     # note use of {{double curlies}} to escape {} in python f"string"
-    c_text = dedent(f"""
-    // {AUTO_GENERATED_NOTICE}
+    c_text = f"""// {AUTO_GENERATED_NOTICE}
     struct state
     {{{state_vars}
     }};
-    """)
+    """
     return c_text
 
 
