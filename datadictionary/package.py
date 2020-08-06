@@ -21,7 +21,7 @@ markdown_link = lambda k : f'[{k[-1]}](#{anchor_name(k)})'
 def meta_to_dataframes(yaml_data, pretty = False):
     dfs = {}
     for chapter, meta in yaml_data.items():
-        meta_meta = vy.meta_meta[chapter]
+        meta_meta = vy.META_ITEMS[chapter]
         cols = {**meta_meta['required'], **meta_meta['optional']}
         df = pd.DataFrame.from_dict(meta, orient='index',  columns=cols)
         # modify the data-frame to make it prettier and add links and achnors
@@ -29,7 +29,7 @@ def meta_to_dataframes(yaml_data, pretty = False):
             # make a pretty cell
             # calculate precision
             df['significant_digits'] = [(max(0, -round(math.log10(r.resolution)))
-                    if vy.isNumber(r.resolution) else 0)
+                    if vy.is_number(r.resolution) else 0)
                     for r in df.itertuples()]
             df['values'] = [vy.pretty_values(r) for r in df.itertuples()]
             df['c_type'] = [vy.c_type(r) for r in df.itertuples()]
@@ -71,7 +71,7 @@ def make_md(yaml_data):
     # header bar
     md.append(" | ".join([f"*[{snake_to_title(c)}](#{c})*" for c in yaml_data.keys()]))
     for chapter, df in dfs.items():
-        meta_meta = vy.meta_meta[chapter]
+        meta_meta = vy.META_ITEMS[chapter]
         # title
         md.append(f'\n# {markdown_anchor([chapter])}{snake_to_title(chapter)} '
               f'({len(df)} items)')
@@ -140,7 +140,7 @@ if __name__ == "__main__":
     parser.add_argument('-j', '--job', action="append",
             default=[], help=f"{allowed_jobs}")
     parser.add_argument('-s', '--sourcedir', action="store",
-            default=vy.dictionary_path,
+            default=vy.DICTIONARY_PATH,
             help='source directory for YAML files')
     parser.add_argument('-o', '--outdir', action="store",
             default=False,

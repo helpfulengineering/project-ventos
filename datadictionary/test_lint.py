@@ -5,9 +5,9 @@ log = print
 
 def test_all_files_have_meta():
     base = lambda f: os.path.splitext(os.path.basename(f))[0]
-    dictionary_yaml_glob = glob.glob(vy.yaml_file(vy.dictionary_path, '*'))
+    dictionary_yaml_glob = glob.glob(vy.yaml_file(vy.DICTIONARY_PATH, '*'))
     files = [base(f) for f in dictionary_yaml_glob]
-    assert set(files) == set(vy.meta_meta.keys())
+    assert set(files) == set(vy.META_ITEMS.keys())
 
 def test_lint():
     data = vy.load_yaml()
@@ -17,7 +17,7 @@ def test_lint():
         key = '-'.join(key_list)
         error[key] = error.get(key, [])
         error[key].append(err)
-    for f, meta in vy.meta_meta.items(): # loop over files
+    for f, meta in vy.META_ITEMS.items(): # loop over files
         required = meta['required']
         allowed = {**required, **meta['optional']}
         key_pattern = re.compile(meta['key_regex'])
@@ -52,4 +52,4 @@ def test_lint():
 def test_package():
     import package
 
-    package.main({'sourcedir': vy.dictionary_path, 'job': ['All']})
+    package.main({'sourcedir': vy.DICTIONARY_PATH, 'job': ['All']})
