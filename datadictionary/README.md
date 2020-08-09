@@ -20,20 +20,21 @@ packaging occurring in later steps.
 
 # Development Tips
 
+The [`makefile`](../makefile) provides useful shortcuts, some of which assume that you have a sibling directory located at `../ventosdoc`.
+
 Executing two seperate watches is seperate terminal windows makes editing the
 files easier, using these commands from the root directory of the project (NOT
 this directory):
 
-`devbin/watch.sh datadictionary "python3.7 datadictionary/package.py > ../ventosdoc/index.md"`
 
-and:
+    make dev-watch-lint
 
-`devbin/watch.sh datadictionary pytest`
+and
 
-or
+    make dev-watch-test
 
-`devbin/watch.sh datadictionary "pytest -sv"`
 
-If you would like a to see the console output of the tests.
+You can then run this to output the generated files:
 
+    make yaml-package
 
