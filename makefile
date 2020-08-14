@@ -15,7 +15,7 @@ dev-watch-lint:
 	devbin/watch.sh datadictionary "make lint"
 
 dev-watch-yaml:
-	devbin/watch.sh datadictionary "python3.7 datadictionary/package.py --vv"
+	devbin/watch.sh datadictionary "python3.7 datadictionary/package.py --job all -vv --outdir ../ventosdoc"
 
 # outputs the help for the CLI tool `package.py`
 yaml-package-help:
