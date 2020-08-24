@@ -39,7 +39,7 @@ def meta_to_dataframes(yaml_data, pretty=False):
     """
     dfs = {}
     for chapter, meta in yaml_data.items():
-        meta_meta = vy.META_ITEMS[chapter]
+        meta_meta = vy.META_META[chapter]
         cols = {**meta_meta['required'], **meta_meta['optional']}
         # chapter dataframe
         cdf = pd.DataFrame.from_dict(meta, orient='index', columns=cols)
@@ -136,7 +136,7 @@ ALLOWED_JOBS = ['C', 'Markdown', 'All']
 def main(args):
     """Main function that handles command line arguments etc"""
 
-    """ Manage verbosity of debug and progress messages """
+    # Manage verbosity of debug and progress messages
     script_verbosity = args.get('verbose', 0)
 
     def chat(text, message_verbosity):

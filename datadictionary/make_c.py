@@ -25,7 +25,8 @@ def make_state_struct(meta_dfs):
 
 def make_all_module_stubs(meta_dfs):
     """ Make all basic VentOS definition. """
-    "Example that assume a VEP call SUPER_PRVC, and BLUETOOTH"
+
+    # "Example that assume a VEP call SUPER_PRVC, and BLUETOOTH"
     example_hooks = {
         'SUPER_PRVC': {
             'post_THINK': {'weight': 60.0},
@@ -40,26 +41,29 @@ def make_all_module_stubs(meta_dfs):
         """ reorder a list of hooks organised by VEPS, to a list organised by
         hook name"""
         hooks = {}
-        for VEP, vep_hooks in example_hooks.items():
+        for vep, vep_hooks in all_hooks.items():
             for hook, hook_meat in vep_hooks.items():
                 if not hook in hooks:
                     hooks[hook] = []
-                hooks[hook].append({'VEP': VEP, **hook_meat})
+                hooks[hook].append({'VEP': vep, **hook_meat})
         return hooks
 
     module_hooks = make_module_hooks(example_hooks)
 
     return '\n'.join(
-        make_module_stub(module, rec, module_hooks)
-        for module, rec in meta_dfs['module'].iterrows())
+        make_module_stub(module, module_hooks)
+        for module in meta_dfs['module'].index)
 
 def specific_hook_c(prefix, module, all_hooks):
-    sh = sorted(all_hooks.get(f"{prefix}_{module}", []),
-        key = lambda h: f'{h["weight"]:08.5}{h["VEP"]}')
-    return [f"hook_{prefix}_{module}_{hook['VEP']}(state);" for hook in sh
-            ] if len(sh) > 0 else [f'; // no {prefix}_{module} hooks']
+    """ make list of C hook function calls for hook_[prefix]_[module] hook """
+    sorted_hooks = sorted(
+        all_hooks.get(f"{prefix}_{module}", []),
+        key=lambda h: f'{h["weight"]:08.5}{h["VEP"]}')
+    return [
+        f"hook_{prefix}_{module}_{hook['VEP']}(state);" for hook in sorted_hooks
+        ] if len(sorted_hooks) > 0 else [f'; // no {prefix}_{module} hooks']
 
-def make_module_stub(module, meta, all_hooks):
+def make_module_stub(module, all_hooks):
     """ Make a basic VentOS definition. """
     indent = '\n      '
     c_text = dedent(f"""

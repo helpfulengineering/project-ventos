@@ -4,12 +4,12 @@ Generic code for handling YAML
 import os
 import math
 import numbers
+import re
 from collections import namedtuple
 import pandas as pd
 import yaml
 
 DICTIONARY_PATH = 'datadictionary'
-
 
 class UniqueKeyLoader(yaml.SafeLoader): # pylint: disable=too-many-ancestors
     """ YAML loader with duplicate key checking """
@@ -104,7 +104,7 @@ def c_type(rec):
     return 'error'
 
 
-META_ITEMS = {
+META_META = {
     'state': {
         'required': {
             'notes': {},
@@ -162,7 +162,7 @@ META_ITEMS = {
             (i.get('min', -math.inf) >= i.get('max', math.inf)) else False,
             # default must between min and max if numeric
             lambda k, i, m, d:
-            f"default {i['default']} not between {i['min']} and {i['max']}"
+            f"default {i.get('default', '-')} not between {i['min']} and {i['max']}"
             if (isinstance(i.get('default', False), numbers.Number) and not (
                 i.get('min', -math.inf) <= i.get('default', False) <= i.get(
                     'max', math.inf))) else False,
@@ -267,7 +267,52 @@ def load_yaml(source_dir=DICTIONARY_PATH):
     Load the entire metadata into memory and return a dictionary
     """
     data = {}
-    for chapter in META_ITEMS:  # loop over files
+    for chapter in META_META:  # loop over files
         yaml_text = open(yaml_file(source_dir, chapter), 'r')
         data[chapter] = yaml.load(yaml_text, Loader=UniqueKeyLoader)
     return data
+
+def lint_meta(meta, all_meta_meta):
+    """ Compare each meta chapter against the meta_meta """
+    error = {}
+    def log_error(key_list, err_message):
+        """ Extend the error dictionary, using a complex key.  """
+        key = '-'.join(key_list)
+        error[key] = error.get(key, [])
+        error[key].append(err_message)
+    def check_fields(chapter, key, fields, allowed_fields):
+        """ perform field by field checks """
+        for field, val in fields.items():
+            field_meta = allowed_fields.get(field, {})
+            enum = field_meta.get('enum', False)
+            if enum and val not in enum:
+                log_error(
+                    [chapter, key, field],
+                    f'#### unknown value: "{val}" expecting one of {enum}')
+            field_type = field_meta.get('type', False)
+            if field_type and not isinstance(val, tuple(field_type)):
+                log_error([
+                    chapter, key, field
+                ], f'#### bad type: "{val}" got {type(val)} expecting {field_type}'
+                          )
+    for chapter, meta_meta in all_meta_meta.items():  # loop over files/chapters
+        required_fields = meta_meta['required']
+        allowed_fields = {**required_fields, **meta_meta['optional']}
+        for key, fields in meta[chapter].items():  # loop over items
+            extra = fields.keys() - allowed_fields.keys()
+            missing = required_fields.keys() - fields.keys()
+            if len(missing) + len(extra) > 0:
+                if len(missing) > 0:
+                    log_error([chapter, key], f'missing: {missing}')
+                if len(extra) > 0:
+                    log_error([chapter, key], f'extra: {extra}')
+            if not re.compile(meta_meta['key_regex']).match(key):
+                log_error(
+                    [chapter, key],
+                    f"#### key: {key} does not match {meta_meta['key_regex']}")
+            check_fields(chapter, key, fields, allowed_fields)
+            for extra_check in meta_meta.get('extra_checks', []):
+                extra_error = extra_check(key, fields, meta_meta, meta)
+                if extra_error:
+                    log_error([chapter, key], f'#### "{extra_error}"')
+    return error
