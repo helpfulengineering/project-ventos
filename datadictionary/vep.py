@@ -2,13 +2,18 @@
 
 Todo:
 
-# lint a package
-# lint a build
 # render a package in markdown
 # much much more...
 
+Done:
+* lint a package
+* lint a build
+* assemble a build, inlcluding extracting all the hooks and complete state
+* describe a build in text
+
 """
 import re
+from copy import deepcopy
 import yaml
 from validator_collection import checkers
 import ventos_yaml as vy
@@ -35,9 +40,9 @@ def get_core_hooks(meta_dfs):
     # flatten list by adding them all together
     return sum(hooks, [])
 
-def read_build(build_yaml_text):
+def read_yaml(yaml_text):
     """ Convert a build text to python structure."""
-    return yaml.load(build_yaml_text, Loader=vy.UniqueKeyLoader)
+    return yaml.load(yaml_text, Loader=vy.UniqueKeyLoader)
 
 def lint_using_regexes(errors, fields, obj, regexes):
     """ Validate simple fields via regex """
@@ -112,3 +117,34 @@ def lint_vep(core_meta_dfs, vepo):
     # This too may be too simple in the future
     errors.update(vy.lint_meta(core_extensions, meta_meta))
     return errors
+
+def assemble_build_definitions(core, build_yaml, vep_yamls):
+    """ Integrate the VEPs into the build
+    returns an object """
+    build = read_yaml(build_yaml)
+    # slot the ve packages in
+    for index, vep_yaml in enumerate(vep_yamls):
+        build['veps'][index].update(read_yaml(vep_yaml))
+    # build a dictionary of hooks
+    build['hooks'] = {vep['name']: vep['hooks'] for vep in build['veps']}
+    # build a updated state structure list
+    build['state'] = deepcopy(core['state'])
+    for vep in build.get('veps', []):
+        build['state'].update(vep.get('state', {}))
+    return build
+
+def describe_build(build, verbosity=1):
+    """ Provide a human readalbe summary string of the build. """
+    def describe(obj):
+        return f"{obj['title']} ({obj['name']}:{obj['tag']})"
+
+    lines = [describe(build)]
+    if verbosity > 0: # add a list of VEPs
+        lines += [describe(vep) for vep in build['veps']]
+    if verbosity > 1: # add a list of hooks
+        lines += [
+            f"{module}:{hooks}"
+            for module, hooks in build['hooks'].items()]
+    if verbosity > 2: # add a list state variables
+        lines += ['State: ' + ', '.join(var for var in build['state'])]
+    return "\n".join(lines)

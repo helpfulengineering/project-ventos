@@ -5,8 +5,8 @@ import vep
 
 def get_core_meta_dfs():
     """Get the core meta data"""
-    core_yaml = vy.load_yaml()
-    return package.meta_to_dataframes(core_yaml, pretty=False)
+    core = vy.load_yaml()
+    return package.meta_to_dataframes(core, pretty=False)
 
 TEST_BUILD_YAML = """
 name: test_build_1
@@ -21,33 +21,30 @@ veps:
 
 
 def test_lint_build():
-    """ initial test WIP """
-    build = vep.read_build(TEST_BUILD_YAML)
-    lint_errors = vep.lint_build(build)
-    assert len(lint_errors) == 0
+    """ Lint the build buy starting with a good one then repeatedly breaking
+    it"""
+    def expect_error_after_linting(expected_error_count, build):
+        lint_errors = vep.lint_build(build)
+        assert len(lint_errors) == expected_error_count
+    build = vep.read_yaml(TEST_BUILD_YAML)
+    expect_error_after_linting(0, build)
     build['name'] += " new"
-    lint_errors = vep.lint_build(build)
-    assert len(lint_errors) == 1
+    expect_error_after_linting(1, build)
     build['project_url'] += " badspace"
-    lint_errors = vep.lint_build(build)
-    assert len(lint_errors) == 2
+    expect_error_after_linting(2, build)
     build['veps'].append({'url': 'https://example.com/vep.yaml'})
-    lint_errors = vep.lint_build(build)
-    assert len(lint_errors) == 2
+    expect_error_after_linting(2, build)
     build['veps'].append({'url': 'https://example.com/vep.yml'})
-    lint_errors = vep.lint_build(build)
-    assert len(lint_errors) == 3
-    build = vep.read_build(TEST_BUILD_YAML)
+    expect_error_after_linting(3, build)
+    build = vep.read_yaml(TEST_BUILD_YAML)
     del build['veps']
-    lint_errors = vep.lint_build(build)
-    assert len(lint_errors) == 1
-    build = vep.read_build(TEST_BUILD_YAML)
+    expect_error_after_linting(1, build)
+    build = vep.read_yaml(TEST_BUILD_YAML)
     del build['name']
-    lint_errors = vep.lint_build(build)
-    assert len(lint_errors) == 1
+    expect_error_after_linting(1, build)
 
-# Example VEP definition
-TEST_VEP_YAML_1 = """
+# Example VEP definitions
+TEST_VEP_YAML = ["""
 name: test_vep_1
 tag: v0.0.5
 title: Test VEP 1
@@ -71,7 +68,41 @@ state:
     min: 0
     max: 1000
     resolution: 0.1
-"""
+""", """
+name: test_vep_2
+tag: v1.0
+title: Test VEP 2 Xenon
+hooks:
+  - pre_LOG
+  - pre_SENSE
+  - pre_DISPLAY
+state:
+  XENON:
+    status: draft
+    notes: Inspired Xenon concentration
+    sot: sensor
+    units: percent
+    min: 0
+    max: 100
+    resolution: 1
+""", """
+name: test_vep_3
+tag: v0.0.1
+title: Test VEP 3 Rhubarb
+hooks:
+  - pre_LOG
+  - post_SENSE
+  - pre_DISPLAY
+state:
+  RHUBARB:
+    status: draft
+    notes: Inspired Rhubarb concentration
+    sot: sensor
+    units: percent
+    min: 0
+    max: 100
+    resolution: 1
+"""]
 
 def test_lint_vep():
     """ Test the VEP linter, starting with a good example then breaking it."""
@@ -80,13 +111,33 @@ def test_lint_vep():
         lint_errors = vep.lint_vep(core_meta_dfs, vepo)
         assert len(lint_errors) == expected_error_count
 
-    vepo = vep.read_build(TEST_VEP_YAML_1)
+    vepo = vep.read_yaml(TEST_VEP_YAML[0])
     expect_error_after_linting(0, vepo)
     vepo['name'] = "bad name"
     expect_error_after_linting(1, vepo)
+    # bad hook
     vepo['hooks'].append('bad_hook')
     expect_error_after_linting(2, vepo)
+    # illegal units
     vepo['state']['CHAMBER']['units'] = 'frogs'
     expect_error_after_linting(3, vepo)
+    # make the max less than the min
     vepo['state']['CHAMBER']['max'] = -1
     expect_error_after_linting(4, vepo)
+
+def test_build():
+    """ assemble a full build """
+    core = vy.load_yaml()
+    base_line_state_var_count = len(core['state'])
+    build = vep.assemble_build_definitions(
+        core, TEST_BUILD_YAML, TEST_VEP_YAML)
+    assert len(build['hooks']) == 3
+    # there are a total of 4 new state variables defined in the test cases
+    assert len(build['state']) == base_line_state_var_count + 4
+    # expect description to be 4 lines long at verbosity = 1
+    # (1 line for title, and one for each VEP)
+    description = vep.describe_build(build, verbosity=1)
+    assert description.count('\n') + 1 == 4
+    # verbose descriptions adds three lines for hooks and a line for state
+    description = vep.describe_build(build, verbosity=3)
+    assert description.count('\n') + 1 == 8
