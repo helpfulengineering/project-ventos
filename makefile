@@ -34,4 +34,9 @@ yaml-package-c:
 yaml-package-md:
 	python3.7 datadictionary/package.py --sourcedir datadictionary --job markdown --outdir ../ventosdoc
 
+# fire build container and drop into bash
+docker-bash:
+	docker build . -t ventos:0.1
+	docker run -it -v `pwd`:/app ventos:0.1 bash
+	# watchmedo shell-command --pattern="/app/datadictionary/*.py" --command="make test" --debug-force-polling
 

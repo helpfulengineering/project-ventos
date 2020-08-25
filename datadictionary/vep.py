@@ -1,9 +1,9 @@
 """WIP on the VentOS Extension Package (vep) system
 
 Todo:
-
-# render a package in markdown
-# much much more...
+* render a package in markdown
+* add requests fetch
+* much much more...
 
 Done:
 * lint a package
@@ -114,7 +114,7 @@ def lint_vep(core_meta_dfs, vepo):
     core_extensions = {k: vepo.get(k, {}) for k in simple_meta_meta_extensions}
     meta_meta = {k: vy.META_META[k] for k in simple_meta_meta_extensions}
     # Do a simple check that the new items meet the existing rules.
-    # This too may be too simple in the future
+    # This may be too simple in the future
     errors.update(vy.lint_meta(core_extensions, meta_meta))
     return errors
 

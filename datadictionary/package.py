@@ -116,7 +116,7 @@ def make_md(yaml_data):
         cdf['key'] = [
             markdown_anchor([chapter, r.Index]) for r in cdf.itertuples()
         ]
-        markdown.append(cdf.to_markdown(showindex=True))
+        markdown.append(cdf.to_markdown(index=True))
         markdown.append('\n[[top]](#top)')
     return '\n'.join(markdown)
 
